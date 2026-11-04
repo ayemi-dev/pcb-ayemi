@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "ayemi")(type "KiCad")(uri "${KIPRJMOD}/lib/ayemi.pretty")(options "")(descr "Librería local de Ayemi"))
+)

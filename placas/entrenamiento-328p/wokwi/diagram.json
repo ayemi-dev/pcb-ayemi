@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "author": "Ayemi",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-nano", "id": "nano", "top": 0, "left": 0, "attrs": {} },
+
+    { "type": "wokwi-resistor", "id": "r301", "top": 20, "left": 250, "attrs": { "value": "1000" } },
+    { "type": "wokwi-led", "id": "led_rojo", "top": 10, "left": 370, "attrs": { "color": "red" } },
+    { "type": "wokwi-resistor", "id": "r302", "top": 70, "left": 250, "attrs": { "value": "510" } },
+    { "type": "wokwi-led", "id": "led_verde", "top": 60, "left": 370, "attrs": { "color": "green" } },
+    { "type": "wokwi-resistor", "id": "r303", "top": 120, "left": 250, "attrs": { "value": "680" } },
+    { "type": "wokwi-led", "id": "led_amarillo", "top": 110, "left": 370, "attrs": { "color": "yellow" } },
+
+    { "type": "wokwi-resistor", "id": "r304", "top": 190, "left": 250, "attrs": { "value": "680" } },
+    { "type": "wokwi-resistor", "id": "r305", "top": 220, "left": 250, "attrs": { "value": "560" } },
+    { "type": "wokwi-resistor", "id": "r306", "top": 250, "left": 250, "attrs": { "value": "510" } },
+    { "type": "wokwi-rgb-led", "id": "rgb", "top": 200, "left": 380, "attrs": { "common": "cathode" } },
+
+    { "type": "wokwi-resistor", "id": "r307", "top": 320, "left": 250, "attrs": { "value": "330" } },
+    { "type": "wokwi-pushbutton", "id": "btn_a", "top": 310, "left": 370, "attrs": { "color": "green" } },
+    { "type": "wokwi-resistor", "id": "r308", "top": 380, "left": 250, "attrs": { "value": "330" } },
+    { "type": "wokwi-pushbutton", "id": "btn_b", "top": 370, "left": 370, "attrs": { "color": "blue" } },
+
+    { "type": "wokwi-buzzer", "id": "zumbador", "top": 440, "left": 370, "attrs": { "volume": "0.1" } },
+
+    { "type": "wokwi-potentiometer", "id": "pot", "top": 0, "left": 480, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "luz", "top": 120, "left": 480, "attrs": {} }
+  ],
+  "connections": [
+    ["nano:7", "r301:1", "red", []],
+    ["r301:2", "led_rojo:A", "red", []],
+    ["led_rojo:C", "nano:GND.1", "black", []],
+
+    ["nano:8", "r302:1", "green", []],
+    ["r302:2", "led_verde:A", "green", []],
+    ["led_verde:C", "nano:GND.1", "black", []],
+
+    ["nano:13", "r303:1", "gold", []],
+    ["r303:2", "led_amarillo:A", "gold", []],
+    ["led_amarillo:C", "nano:GND.1", "black", []],
+
+    ["nano:9", "r304:1", "red", []],
+    ["r304:2", "rgb:R", "red", []],
+    ["nano:6", "r305:1", "green", []],
+    ["r305:2", "rgb:G", "green", []],
+    ["nano:5", "r306:1", "blue", []],
+    ["r306:2", "rgb:B", "blue", []],
+    ["rgb:COM", "nano:GND.1", "black", []],
+
+    ["nano:2", "r307:1", "green", []],
+    ["r307:2", "btn_a:1.l", "green", []],
+    ["btn_a:2.l", "nano:GND.1", "black", []],
+
+    ["nano:4", "r308:1", "blue", []],
+    ["r308:2", "btn_b:1.l", "blue", []],
+    ["btn_b:2.l", "nano:GND.1", "black", []],
+
+    ["nano:3", "zumbador:2", "orange", []],
+    ["zumbador:1", "nano:GND.1", "black", []],
+
+    ["pot:VCC", "nano:5V", "red", []],
+    ["pot:GND", "nano:GND.1", "black", []],
+    ["pot:SIG", "nano:A6", "purple", []],
+
+    ["luz:VCC", "nano:5V", "red", []],
+    ["luz:GND", "nano:GND.1", "black", []],
+    ["luz:SIG", "nano:A7", "white", []]
+  ],
+  "dependencies": {}
+}

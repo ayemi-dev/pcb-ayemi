@@ -1,0 +1,61 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/5a4a82d0-a6a1-45b0-ad3b-1bc88ae22217",
+            "violations": []
+        },
+        {
+            "path": "/micro/",
+            "uuid_path": "/5a4a82d0-a6a1-45b0-ad3b-1bc88ae22217/129de4c4-8066-461c-badd-e2c2fa33d3f6",
+            "violations": []
+        },
+        {
+            "path": "/usb/",
+            "uuid_path": "/5a4a82d0-a6a1-45b0-ad3b-1bc88ae22217/12ea6111-9510-4e2e-bc1f-7ee6220a0ce5",
+            "violations": []
+        },
+        {
+            "path": "/alimentacion/",
+            "uuid_path": "/5a4a82d0-a6a1-45b0-ad3b-1bc88ae22217/74454cbe-3638-4b61-ae20-6a8f28cdff01",
+            "violations": []
+        },
+        {
+            "path": "/perifericos/",
+            "uuid_path": "/5a4a82d0-a6a1-45b0-ad3b-1bc88ae22217/92f056d6-51f5-4884-b736-a0ad208d3b3d",
+            "violations": []
+        },
+        {
+            "path": "/conectores/",
+            "uuid_path": "/5a4a82d0-a6a1-45b0-ad3b-1bc88ae22217/347646e6-da9b-45e0-a8c2-345121e5e7fd",
+            "violations": []
+        }
+    ],
+    "source": "enlace-esp32s3.kicad_sch"
+}

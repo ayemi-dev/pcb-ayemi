@@ -1,0 +1,56 @@
+# Hoja «conectores»: Conectores de 4 pines, PANTALLA, headers de GPIO, SPI y ranura microSD.
+meta:
+  hoja: conectores.kicad_sch
+  titulo: "Conectores"
+  referencias: [401, 499]
+
+redes_de_poder: ["+5V", "+3V3", "GND"]
+etiquetas_jerarquicas:
+  - {red: NRST, forma: bidirectional}
+  - {red: PA15, forma: bidirectional}
+  - {red: PA2, forma: bidirectional}
+  - {red: PA3, forma: bidirectional}
+  - {red: PA4, forma: bidirectional}
+  - {red: PA5, forma: bidirectional}
+  - {red: PA6, forma: bidirectional}
+  - {red: PA7, forma: bidirectional}
+  - {red: PB0, forma: bidirectional}
+  - {red: PB1, forma: bidirectional}
+  - {red: PB10, forma: bidirectional}
+  - {red: PB3, forma: bidirectional}
+  - {red: PB4, forma: bidirectional}
+  - {red: PB5, forma: bidirectional}
+  - {red: PB6, forma: bidirectional}
+  - {red: PB7, forma: bidirectional}
+  - {red: PB8, forma: bidirectional}
+  - {red: PB9, forma: bidirectional}
+  - {red: PC14, forma: bidirectional}
+  - {red: PC15, forma: bidirectional}
+  - {red: SD_CD, forma: bidirectional}
+  - {red: SD_CS, forma: bidirectional}
+  - {red: SD_MISO, forma: bidirectional}
+  - {red: SD_MOSI, forma: bidirectional}
+  - {red: SD_SCK, forma: bidirectional}
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+componentes:
+  - {ref: J401, simbolo: "Connector_Generic:Conn_01x04", valor: "I2C 1", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: PB6, 2: PB7, 3: "+3V3", 4: GND}, nota: "SCL - SDA - 3V3 - GND. HUELLA PROVISIONAL."}
+  - {ref: J402, simbolo: "Connector_Generic:Conn_01x04", valor: "I2C 2", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: PB6, 2: PB7, 3: "+3V3", 4: GND}, nota: "En paralelo con I2C 1."}
+  - {ref: J403, simbolo: "Connector_Generic:Conn_01x04", valor: "SERIE", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: PA3, 2: PA2, 3: "+3V3", 4: GND}, nota: "RX - TX - 3V3 - GND, rotulados desde la placa: el pin 1 es la entrada de la placa."}
+  - {ref: J404, simbolo: "Connector_Generic:Conn_01x04", valor: "ANALOGICO 1", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: PA4, 2: PA5, 3: "+3V3", 4: GND}}
+  - {ref: J405, simbolo: "Connector_Generic:Conn_01x04", valor: "ANALOGICO 2", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: PA6, 2: PA7, 3: "+3V3", 4: GND}}
+  - {ref: J406, simbolo: "Connector_Generic:Conn_01x04", valor: "PANTALLA", huella: "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", lcsc: C492403, clase: Extended, alternativa: C2691448, justificacion: "Header de 2.54 mm: no hay Basic.", datasheet: "https://www.lcsc.com/product-detail/C492403.html", pines: {1: GND, 2: "+3V3", 3: PB6, 4: PB7}, nota: "GND - VCC - SCL - SDA, el orden de las pantallas OLED I2C comunes. 3.3 V."}
+  - {ref: R401, simbolo: "Device:R", valor: "4.7k", lcsc: C23162, clase: Basic, alternativa: C99782, datasheet: "https://www.lcsc.com/product-detail/C23162.html", pines: {1: "+3V3", 2: PB7}, nota: "Pull-up de SDA: tr = 0.8473 x 4.7 kΩ x 75 pF = 0.30 us."}
+  - {ref: R402, simbolo: "Device:R", valor: "4.7k", lcsc: C23162, clase: Basic, alternativa: C99782, datasheet: "https://www.lcsc.com/product-detail/C23162.html", pines: {1: "+3V3", 2: PB6}, nota: "Pull-up de SCL."}
+  - {ref: J407, simbolo: "Connector_Generic:Conn_01x10", valor: "IO A", huella: "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical", lcsc: C492409, clase: Extended, alternativa: C41425300, justificacion: "Header de 2.54 mm: no hay Basic.", datasheet: "https://www.lcsc.com/product-detail/C492409.html", pines: {1: PB0, 2: PB1, 3: PB10, 4: PB5, 5: PB8, 6: PB9, 7: PC14, 8: PC15, 9: PA15, 10: GND}, nota: "Los pines que libera el DIP y GND."}
+  - {ref: J408, simbolo: "Connector_Generic:Conn_01x06", valor: "IO B", huella: "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical", lcsc: C492405, clase: Extended, alternativa: C42431790, justificacion: "Header de 2.54 mm: no hay Basic.", datasheet: "https://www.lcsc.com/product-detail/C492405.html", pines: {1: PB3, 2: PB4, 3: "+3V3", 4: "+5V", 5: GND, 6: NRST}, nota: "GPIO libres, 3V3, 5V (VBUS después del fusible), GND y NRST."}
+  - {ref: J409, simbolo: "Connector_Generic:Conn_01x06", valor: "SPI", huella: "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical", lcsc: C492405, clase: Extended, alternativa: C42431790, justificacion: "Header de 2.54 mm: no hay Basic.", datasheet: "https://www.lcsc.com/product-detail/C492405.html", pines: {1: SD_MOSI, 2: SD_MISO, 3: SD_SCK, 4: SD_CS, 5: "+3V3", 6: GND}, nota: "MOSI (PB15), MISO (PB14), SCK (PB13), CS (PB12), 3V3, GND. Comparte bus con la microSD."}
+  - {ref: J411, simbolo: "Connector:Micro_SD_Card_Det_Hirose_DM3AT", valor: "microSD", huella: "Connector_Card:microSD_HC_Hirose_DM3AT-SF-PEJM5", lcsc: C114218, clase: Extended, alternativa: C585350, justificacion: "Ranura microSD push-push con detección: ninguna es Basic. La alternativa C585350 (Molex) es de otra huella.", datasheet: "https://www.lcsc.com/product-detail/C114218.html", pines: {1: SD_DAT2, 2: SD_CS, 3: SD_MOSI, 4: "+3V3", 5: SD_SCK, 6: GND, 7: SD_MISO, 8: SD_DAT1, 9: SD_CD, 10: GND, SH: GND}, nota: "Modo SPI. DET_A a GND y DET_B a PC13. Boca hacia el borde de la placa."}
+  - {ref: R403, simbolo: "Device:R", valor: "10k", lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/product-detail/C25804.html", pines: {1: "+3V3", 2: SD_CS}, nota: "Pull-up."}
+  - {ref: R404, simbolo: "Device:R", valor: "10k", lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/product-detail/C25804.html", pines: {1: "+3V3", 2: SD_DAT1}, nota: "Pull-up."}
+  - {ref: R405, simbolo: "Device:R", valor: "10k", lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/product-detail/C25804.html", pines: {1: "+3V3", 2: SD_DAT2}, nota: "Pull-up."}
+  - {ref: R406, simbolo: "Device:R", valor: "10k", lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/product-detail/C25804.html", pines: {1: "+3V3", 2: SD_MOSI}, nota: "Pull-up a un nivel conocido (SPI de la microSD, AN2606 4.3)."}
+  - {ref: R407, simbolo: "Device:R", valor: "10k", lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/product-detail/C25804.html", pines: {1: "+3V3", 2: SD_CD}, nota: "Pull-up."}
+  - {ref: C401, simbolo: "Device:C", valor: "10uF", lcsc: C19702, clase: Basic, alternativa: C380314, datasheet: "https://www.lcsc.com/product-detail/C19702.html", pines: {1: "+3V3", 2: GND}, nota: "Picos de la tarjeta (hasta 100 mA)."}
+  - {ref: C402, simbolo: "Device:C", valor: "100nF", lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/product-detail/C14663.html", pines: {1: "+3V3", 2: GND}}

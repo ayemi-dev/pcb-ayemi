@@ -1,0 +1,126 @@
+# Hoja «usb»: USB-C, protección ESD, CH340C, líneas serie, LEDs TX/RX y autorreset.
+# Cálculos: design.md 5.2.
+meta:
+  hoja: usb.kicad_sch
+  titulo: "USB y serie"
+  referencias: [101, 199]
+
+redes_de_poder: ["VBUS", "+5V", "GND"]
+
+etiquetas_jerarquicas:
+  - {red: D0,    forma: bidirectional}
+  - {red: D1,    forma: bidirectional}
+  - {red: RESET, forma: bidirectional}
+
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+
+piezas:
+  r5k1: &r5k1 {lcsc: C23186, clase: Basic, alternativa: C105580, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010116_UNI-ROYAL-Uniroyal-Elec-0603WAF5101T5E_C23186.pdf"}
+  r1k: &r1k {lcsc: C21190, clase: Basic, alternativa: C22548, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010130_UNI-ROYAL-Uniroyal-Elec-0603WAF1001T5E_C21190.pdf"}
+  r1k5: &r1k5 {lcsc: C22843, clase: Basic, alternativa: C114668, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010130_UNI-ROYAL-Uniroyal-Elec-0603WAF1501T5E_C22843.pdf"}
+  c100n: &c100n {lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"}
+  led_rojo: &led_rojo {lcsc: C2286, clase: Basic, alternativa: C84263, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_1810231112_Hubei-KENTO-Elec-KT-0603R_C2286.pdf"}
+
+componentes:
+  - ref: J101
+    simbolo: "Connector:USB_C_Receptacle_USB2.0_16P"
+    valor: "USB-C"
+    huella: "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
+    lcsc: C165948
+    clase: Extended
+    alternativa: C5337088
+    justificacion: "Receptáculo USB-C de 16 pines: ninguno es Basic (consulta 2026-10-28)."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2205251630_Korean-Hroparts-Elec-TYPE-C-31-M-12_C165948.pdf"
+    pines:
+      A1: GND
+      A4: VBUS
+      A5: CC1
+      A6: USB_DP
+      A7: USB_DM
+      A8: NC          # SBU1
+      A9: VBUS
+      A12: GND
+      B1: GND
+      B4: VBUS
+      B5: CC2
+      B6: USB_DP
+      B7: USB_DM
+      B8: NC          # SBU2
+      B9: VBUS
+      B12: GND
+      SH: GND
+    nota: "Solo 5 V y datos. CC1 y CC2 con 5.1 kΩ a GND (R101, R102)."
+
+  - {ref: R101, simbolo: "Device:R", valor: "5.1k", <<: *r5k1, pines: {1: CC1, 2: GND}, nota: "Rd de CC1: 5.1 kΩ (USB-C pide 5.1 kΩ ±20 %); sin ella el cargador no da 5 V."}
+  - {ref: R102, simbolo: "Device:R", valor: "5.1k", <<: *r5k1, pines: {1: CC2, 2: GND}, nota: "Rd de CC2: 5.1 kΩ."}
+
+  - ref: U102
+    simbolo: "Power_Protection:USBLC6-2SC6"
+    valor: "USBLC6-2SC6"
+    huella: "Package_TO_SOT_SMD:SOT-23-6"
+    lcsc: C7519
+    clase: Extended
+    alternativa: C2687116
+    justificacion: "Arreglo TVS de USB en SOT-23-6: no hay Basic."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2410121836_STMicroelectronics-USBLC6-2SC6_C7519.pdf"
+    pines: {1: USB_DP, 2: GND, 3: USB_DM, 4: USB_DM, 5: VBUS, 6: USB_DP}
+    nota: "En línea: pines 1 y 6 son D+ y 3 y 4 son D-. A menos de 5 mm del conector (requisito 2.6)."
+
+  - ref: U101
+    simbolo: "Interface_USB:CH340C"
+    valor: "CH340C"
+    huella: "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm"
+    lcsc: C84681
+    clase: Extended
+    alternativa: C7464026
+    justificacion: "Convertidor USB-serie con oscilador interno: ninguna variante CH340 es Basic. JLCPCB lo marca como descontinuado; plan B en reportes/piezas.md."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2406191656_WCH-Jiangsu-Qin-Heng-CH340C_C84681.pdf"
+    corriente_ma: {tipico: 10, maximo: 15}
+    pines:
+      1: GND
+      2: CH_TXD
+      3: CH_RXD
+      4: V3
+      5: USB_DP
+      6: USB_DM
+      7: NC
+      8: NC
+      9: NC       # CTS
+      10: NC      # DSR
+      11: NC      # RI
+      12: NC      # DCD
+      13: DTR
+      14: NC      # RTS
+      15: NC      # R232: se confirma con la hoja de datos (tarea 2.9)
+      16: "+5V"
+    nota: "Corriente de 10/15 mA estimada. V3 lleva 100 nF a GND (C102) con alimentación de 5 V."
+
+  - {ref: C101, simbolo: "Device:C", valor: "100nF", <<: *c100n, pines: {1: "+5V", 2: GND}, nota: "Desacoplo de VCC del CH340C."}
+  - {ref: C102, simbolo: "Device:C", valor: "100nF", <<: *c100n, pines: {1: V3, 2: GND}, nota: "Condensador de V3 (fuente interna) a 5 V."}
+  - {ref: C103, simbolo: "Device:C", valor: "100nF", <<: *c100n, pines: {1: DTR, 2: RESET}, nota: "Autorreset: DTR# a RESET por 100 nF. tau = 10 kΩ x 100 nF = 1 ms; RESET queda 105 µs bajo VIL."}
+
+  - {ref: R103, simbolo: "Device:R", valor: "1k", <<: *r1k, pines: {1: CH_TXD, 2: D0}, nota: "Serie TXD del CH340 hacia D0 (RX del micro): 1 kΩ."}
+  - {ref: R104, simbolo: "Device:R", valor: "1k", <<: *r1k, pines: {1: D1, 2: CH_RXD}, nota: "Serie D1 (TX del micro) hacia RXD del CH340: 1 kΩ."}
+
+  - ref: D101
+    simbolo: "Device:LED"
+    valor: "TX"
+    huella: "LED_SMD:LED_0603_1608Metric"
+    <<: *led_rojo
+    pines: {1: D1, 2: TX_A}
+    nota: "LED de TX en la red D1; enciende cuando D1 baja."
+  - {ref: R105, simbolo: "Device:R", valor: "1.5k", <<: *r1k5, pines: {1: "+5V", 2: TX_A}, corriente_ma: {tipico: 1.87, maximo: 2.23}, nota: "I = (5.0 - 2.0 - 0.2) / 1.5 kΩ = 1.87 mA típico; 2.23 mA máximo (design.md 5.2)."}
+
+  - ref: D102
+    simbolo: "Device:LED"
+    valor: "RX"
+    huella: "LED_SMD:LED_0603_1608Metric"
+    <<: *led_rojo
+    pines: {1: CH_TXD, 2: RX_A}
+    nota: "LED de RX en TXD del CH340 (antes de R103); enciende cuando la línea baja."
+  - {ref: R106, simbolo: "Device:R", valor: "1.5k", <<: *r1k5, pines: {1: "+5V", 2: RX_A}, corriente_ma: {tipico: 1.87, maximo: 2.23}, nota: "Igual que R105."}
+
+  - {ref: "#FLG01", simbolo: "power:PWR_FLAG", valor: "PWR_FLAG", pines: {1: VBUS}, bom: false, nota: "VBUS nace en el conector."}
+  - {ref: "#FLG02", simbolo: "power:PWR_FLAG", valor: "PWR_FLAG", pines: {1: GND}, bom: false, nota: "GND nace en el conector."}

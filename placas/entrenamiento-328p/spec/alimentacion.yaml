@@ -1,0 +1,71 @@
+# Hoja «alimentacion»: PTC, reserva de 10 µF, LDO de 3.3 V y LED de encendido.
+# Cálculos: design.md 5.1.
+meta:
+  hoja: alimentacion.kicad_sch
+  titulo: "Alimentación"
+  referencias: [201, 299]
+
+redes_de_poder: ["VBUS", "+5V", "+3V3", "GND"]
+
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+
+piezas:
+  r1k5: &r1k5 {lcsc: C22843, clase: Basic, alternativa: C114668, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010130_UNI-ROYAL-Uniroyal-Elec-0603WAF1501T5E_C22843.pdf"}
+  c1u: &c1u {lcsc: C15849, clase: Basic, alternativa: C106214, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Samsung-Electro-Mechanics-CL10A105KB8NNNC_C15849.pdf"}
+
+componentes:
+  - ref: F201
+    simbolo: "Device:Polyfuse"
+    valor: "500mA"
+    huella: "Fuse:Fuse_1206_3216Metric"
+    lcsc: C163512
+    clase: Extended
+    alternativa: C49318356
+    justificacion: "Fusible rearmable de 500 mA en 1206: ninguno es Basic."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Littelfuse-1206L050YR_C163512.pdf"
+    pines: {1: VBUS, 2: "+5V"}
+    nota: "Retención 500 mA, R máxima 700 mΩ (criterio: <= 0.8 Ω)."
+
+  - ref: C201
+    simbolo: "Device:C"
+    valor: "10uF"
+    lcsc: C19702
+    clase: Basic
+    alternativa: C380314
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Samsung-Electro-Mechanics-CL10A106KP8NNNC_C19702.pdf"
+    pines: {1: "+5V", 2: GND}
+    nota: "Reserva del riel de 5 V. X5R de 10 V en 0603: leer la curva de polarización; si queda < 4.7 µF reales, 0805 de 16 o 25 V (excepción al 9.3, decide Ayemi)."
+
+  - {ref: C202, simbolo: "Device:C", valor: "1uF", <<: *c1u, pines: {1: "+5V", 2: GND}, nota: "Entrada del LDO."}
+  - {ref: C203, simbolo: "Device:C", valor: "1uF", <<: *c1u, pines: {1: "+3V3", 2: GND}, nota: "Salida del LDO."}
+
+  - ref: U201
+    simbolo: "Regulator_Linear:AP2112K-3.3"
+    valor: "AP2112K-3.3"
+    huella: "Package_TO_SOT_SMD:SOT-23-5"
+    lcsc: C51118
+    clase: Extended
+    alternativa: C82942
+    justificacion: "LDO de 3.3 V estable con cerámicos en SOT-23-5: ninguno es Basic."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Diodes-Incorporated-AP2112K-3-3TRG1_C51118.pdf"
+    corriente_ma: {tipico: 0.05, maximo: 0.10}
+    pines: {1: "+5V", 2: GND, 3: "+5V", 4: NC, 5: "+3V3"}
+    nota: "EN a +5V (siempre activo). Recomendado <= 50 mA en el pin de 3V3 (design.md 5.1)."
+
+  - {ref: R201, simbolo: "Device:R", valor: "1.5k", <<: *r1k5, pines: {1: "+5V", 2: PWR_A}, corriente_ma: {tipico: 1.33, maximo: 1.63}, nota: "I = (5.0 - 3.0) / 1.5 kΩ = 1.33 mA típico (design.md 5.1)."}
+
+  - ref: D201
+    simbolo: "Device:LED"
+    valor: "Azul"
+    huella: "LED_SMD:LED_0603_1608Metric"
+    lcsc: C2288
+    clase: Extended
+    alternativa: C84266
+    justificacion: "LED azul 0603: el único LED 0603 Basic es el rojo."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_1810220913_Hubei-KENTO-Elec-KT-0603B_C2288.pdf"
+    pines: {1: GND, 2: PWR_A}
+    nota: "LED de encendido."
+
+  - {ref: "#FLG03", simbolo: "power:PWR_FLAG", valor: "PWR_FLAG", pines: {1: "+5V"}, bom: false, nota: "+5V nace en la salida del PTC."}

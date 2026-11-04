@@ -1,0 +1,20 @@
+# Hoja «usb»: USB-C directo al microcontrolador, protección ESD y resistencias CC.
+meta:
+  hoja: usb.kicad_sch
+  titulo: "USB"
+  referencias: [101, 199]
+
+redes_de_poder: ["VBUS", "GND"]
+etiquetas_jerarquicas:
+  - {red: USB_DM, forma: bidirectional}
+  - {red: USB_DP, forma: bidirectional}
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+componentes:
+  - {ref: J101, simbolo: "Connector:USB_C_Receptacle_USB2.0_16P", valor: "USB-C", huella: "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12", lcsc: C165948, clase: Extended, alternativa: C5337088, justificacion: "Receptáculo USB-C de 16 pines: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C165948.html", pines: {A1: GND, A4: VBUS, A5: CC1, A6: USB_DP, A7: USB_DM, A8: "NC", A9: VBUS, A12: GND, B1: GND, B4: VBUS, B5: CC2, B6: USB_DP, B7: USB_DM, B8: "NC", B9: VBUS, B12: GND, SH: GND}, nota: "Solo 5 V y datos. CC1 y CC2 con 5.1 kΩ a GND (R101, R102)."}
+  - {ref: R101, simbolo: "Device:R", valor: "5.1k", lcsc: C23186, clase: Basic, alternativa: C105580, datasheet: "https://www.lcsc.com/product-detail/C23186.html", pines: {1: CC1, 2: GND}, nota: "Rd de CC1: 5.1 kΩ; sin ella el cargador no da 5 V."}
+  - {ref: R102, simbolo: "Device:R", valor: "5.1k", lcsc: C23186, clase: Basic, alternativa: C105580, datasheet: "https://www.lcsc.com/product-detail/C23186.html", pines: {1: CC2, 2: GND}, nota: "Rd de CC2: 5.1 kΩ."}
+  - {ref: U102, simbolo: "Power_Protection:USBLC6-2SC6", valor: "USBLC6-2SC6", huella: "Package_TO_SOT_SMD:SOT-23-6", lcsc: C7519, clase: Extended, alternativa: C2687116, justificacion: "Arreglo TVS de USB en SOT-23-6: no hay Basic.", datasheet: "https://www.lcsc.com/product-detail/C7519.html", pines: {1: USB_DP, 2: GND, 3: USB_DM, 4: USB_DM, 5: VBUS, 6: USB_DP}, nota: "En línea: pines 1 y 6 son D+ y 3 y 4 son D-. A menos de 5 mm del conector."}
+  - {ref: "#FLG01", simbolo: "power:PWR_FLAG", valor: "PWR_FLAG", bom: false, pines: {1: VBUS}, nota: "VBUS nace en el conector."}
+  - {ref: "#FLG02", simbolo: "power:PWR_FLAG", valor: "PWR_FLAG", bom: false, pines: {1: GND}, nota: "GND nace en el conector."}

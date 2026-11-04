@@ -1,0 +1,56 @@
+Piezas a revisar en la vista previa del ensamblado de JLCPCB (versión 0.1)
+
+Para cada una, compara en la vista previa el pin 1, la polaridad y el giro con la serigrafía y con el renders/superior.png.
+Si una pieza sale girada, anota los grados en `rotacion_jlc` de spec/pcb.yaml (por huella) y vuelve a correr fab.py.
+
+Circuitos integrados (pin 1 y giro)
+  U1     ESP32-S3-WROOM-1_ayemi                           giro en KiCad 180
+  U102   SOT-23-6                                         giro en KiCad 0
+  U201   SOT-223-3_TabPin2                                giro en KiCad 0
+  U301   SHT4x_ayemi                                      giro en KiCad 0
+
+Transistores (giro y orden de pines)
+  Q301   SOT-23                                           giro en KiCad 0
+  Q302   LED_1206_3216Metric                              giro en KiCad 90
+  Q303   SOT-23                                           giro en KiCad 0
+  Q304   SOT-23                                           giro en KiCad 0
+  Q305   SOT-23                                           giro en KiCad 0
+
+Diodos y LEDs (cátodo)
+  D201   LED_0603_1608Metric                              giro en KiCad 0
+  D301   LED_0603_1608Metric                              giro en KiCad 0
+  D302   LED_0603_1608Metric                              giro en KiCad 0
+  D303   LED_0603_1608Metric                              giro en KiCad 0
+  D304   LED_Avago_PLCC4_3.2x2.8mm_CW                     giro en KiCad 0
+  D305   D_SOD-123                                        giro en KiCad 0
+
+Cristal (pin 1)
+
+Conectores y DIP (pin 1 y lado de entrada)
+  J101   USB_C_Receptacle_HRO_TYPE-C-31-M-12              giro en KiCad 0
+  J401   JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal giro en KiCad 180
+  J402   JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal giro en KiCad 180
+  J403   JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal giro en KiCad 180
+  J404   JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal giro en KiCad 180
+  J405   JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal giro en KiCad 180
+  J406   PinHeader_1x04_P2.54mm_Vertical                  giro en KiCad 90
+  J407   PinHeader_1x10_P2.54mm_Vertical                  giro en KiCad 0
+  J408   PinHeader_1x12_P2.54mm_Vertical                  giro en KiCad 0
+  SW303  SW_DIP_SPSTx10_Slide_Omron_A6S-1010x_W8.9mm_P2.54mm giro en KiCad 90
+
+Resto con polaridad o giro
+  BZ301  MagneticBuzzer_CUI_CMT-8504-100-SMT              giro en KiCad 0
+  F201   Fuse_1206_3216Metric                             giro en KiCad 0
+  RV301  Potentiometer_Alps_RK09K_Single_Vertical         giro en KiCad 0
+  SW1    SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm             giro en KiCad 0
+  SW2    SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm             giro en KiCad 0
+  SW301  SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm             giro en KiCad 0
+  SW302  SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm             giro en KiCad 0
+
+Huellas provisionales (comprobar contra la hoja de datos de la pieza; el pin 1 y las dimensiones pueden no coincidir)
+  BZ301  la CUI CMT-8504 es de 8.5 mm; la pieza real es el Fengming YS-SBZ8530C05R30.
+  D304   el orden de pines y el pin 1 del SZYY1209RGB-B no se han comparado con su hoja de datos.
+  J401   SCL - SDA - 3V3 - GND. HUELLA PROVISIONAL.
+  Q302   polaridad del 1206 sin comprobar.
+  SW303  se usa el patrón del Omron A6S; comparar con la hoja de datos del DO-10PT.
+

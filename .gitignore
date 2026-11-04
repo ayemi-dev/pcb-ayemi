@@ -1,0 +1,16 @@
+# KiCad
+*-backups/
+*.kicad_prl
+fp-info-cache
+*.lck
+\#auto_saved_files#
+_autosave-*
+# Python
+__pycache__/
+*.pyc
+# Varios
+.history/
+.DS_Store
+Thumbs.db
+
+placas/*/reportes/construccion.txt

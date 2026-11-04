@@ -1,0 +1,6 @@
+(version 1)
+# Debajo del cristal y sus capacitores solo pueden pasar GND y las redes del cristal.
+# El área se llama CRISTAL (zona de reglas creada por tools/colocar.py con el contorno de Y1, C1 y C2).
+(rule "CRISTAL_sin_pistas"
+  (condition "A.insideArea('CRISTAL') && A.NetName != 'GND' && A.NetName != 'XT1' && A.NetName != '/micro/XT1' && A.NetName != 'XT2' && A.NetName != '/micro/XT2'")
+  (constraint disallow track via))

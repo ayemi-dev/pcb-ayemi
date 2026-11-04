@@ -1,0 +1,338 @@
+﻿# =============================================================================
+#  Placa de entrenamiento Ayemi (ATmega328P) · spec de la placa
+#  Fuente de verdad para tools/pcb_setup.py, colocar.py, costura.py,
+#  serigrafia.py y fab.py. Kiro completó los «POR DEFINIR» en la fase 3
+#  (2026-10-28) según design.md sección 8. No se cambia sin avisar.
+# =============================================================================
+
+placa:
+  nombre: "Chispa por Ayemi"     # nombre fijado por Dirección (2026-11-02)
+  version: "0.1"
+  ancho_mm: 90            # rev. 1b: el documento de Dirección permite hasta 80; 90 justificado en design.md 8.3
+  alto_mm: 60
+  radio_esquinas_mm: 3
+  capas: 2
+  grosor_mm: 1.6
+  mascara: negra
+  serigrafia: blanca
+  piezas_solo_arriba: true
+  origen_mm: [100, 80]    # esquina superior izquierda de la placa dentro del archivo de KiCad
+
+barrenos:
+  tipo: M3                # 3.2 mm, sin cobre (NPTH) salvo que design.md diga otra cosa
+  separacion_borde_mm: 4
+  huella: "MountingHole:MountingHole_3.2mm_M3"
+  posiciones: [[4, 4], [86, 4], [4, 56], [86, 56]]   # H1 a H4
+  exclusion_mm: 6.4       # diámetro libre de cobre y componentes
+
+# Reglas conservadoras de JLCPCB para 2 capas estándar. La página de capacidades
+# de JLCPCB no se pudo leer entera desde aquí (contenido dinámico); estas cifras son
+# más estrictas que las capacidades estándar que conozco (0.127 / 0.127 mm, taladro de
+# vía 0.3 mm, cobre a borde 0.2 mm). El DFM de la tarea 4.5 las confirma.
+reglas:
+  pista_minima_mm: 0.15
+  separacion_minima_mm: 0.15
+  via_diametro_mm: 0.6
+  via_taladro_mm: 0.3
+  anillo_minimo_mm: 0.15
+  cobre_a_borde_mm: 0.3
+  taladro_minimo_mm: 0.3
+  serigrafia_alto_min_mm: 1.0
+  serigrafia_trazo_min_mm: 0.15
+
+clases_de_red:
+  Default:  {pista_mm: 0.25, separacion_mm: 0.2}
+  Potencia: {pista_mm: 0.5,  separacion_mm: 0.2, redes: ["+5V", "+3V3", VBUS, GND]}   # rev. 1: +3V3 entra, VBUS_F sale (la salida del PTC es +5V)
+  USB:      {pista_mm: 0.3,  separacion_mm: 0.2, redes: [USB_DP, USB_DM]}
+
+planos:
+  - {red: GND, capas: [F.Cu, B.Cu], margen_borde_mm: 0.5, separacion_mm: 0.3}
+
+costura_gnd:
+  rejilla_mm: 5
+  borde_paso_mm: 3
+  borde_margen_mm: 1.5
+
+# Ajustes de tools/rutear.py. El USB-C tiene sus pads a 0.5 mm de paso: no cabe una pista de 0.25 mm con
+# 0.2 mm de aire entre pads de redes distintas en la rejilla de 0.1 mm. Esa zona se rutea aparte, en una
+# «ventana» con rejilla de 0.05 mm y pista de 0.2 mm (aire de 0.2 mm, igual que el resto). Es una
+# excepción al ancho de la clase USB (0.3 mm) y se anota en el reporte del paso.
+ruteo:
+  resolucion_mm: 0.1
+  pasadas: 1            # si queda algo sin rutear, más pasadas lo promueven de prioridad (no ayudó en esta placa)
+  abanico: [U1]         # piezas de paso fino: de cada pata sale un tramo recto antes de rutear
+  abanico_mm: 1.0
+  sin_vias: [XT1, XT2]  # design.md 10.5: las pistas del cristal van en la cara superior y sin vías
+  refinar_s: 900        # con todo ruteado, cada red se rehace con A* exacto y se queda la más corta
+  mejora_s: 1500        # tiempo para deshacer y reintentar las redes que estorban a una conexión pendiente
+  fino: {pista_mm: 0.2, separacion_mm: 0.2}
+  ventanas:
+    - {nombre: "USB-C", x_mm: [7, 29], y_mm: [34, 59], resolucion_mm: 0.05, ancho_mm: 0.2, ancho_medio_mm: 0.4, redes: [CC1, CC2, USB_DM, USB_DP, VBUS], redes_medias: [VBUS], gnd_pads: [U102.2]}
+
+areas_prohibidas:
+  - nombre: CRISTAL
+    descripcion: "Debajo del cristal y sus capacitores: solo GND y las dos redes del cristal"
+    refs: [Y1, C1, C2]      # el contorno se calcula con estas piezas
+    margen_mm: 0.3
+    redes_permitidas: [GND, XT1, XT2]
+
+# Zonas de la placa (fase 3), de design.md 8.2 y 8.3.
+zonas:
+  usb:        {borde: inferior, nota: "USB-C con la boca hacia afuera; ESD a < 10 mm"}
+  grove:      {borde: superior, nota: "Los 5 conectores en el borde superior, boca hacia afuera, paso de 14 mm"}
+  manos:      {x_mm: [40, 80], y_mm: [10, 56], nota: "Botones, potenciómetro y DIP lejos del USB-C (> 30 mm)"}
+  headers:    {izquierdo: "J407: D0–D13 y GND", derecho: "J408: A0–A7, 5V, 3V3, GND y RESET"}
+
+# Piezas con posición exacta (conectores, USB, headers y barrenos): x e y del origen de la huella.
+fijos:
+  H1:   {x_mm: 4,    y_mm: 4,     rot: 0}
+  H2:   {x_mm: 86,   y_mm: 4,     rot: 0}
+  H3:   {x_mm: 4,    y_mm: 56,    rot: 0}
+  H4:   {x_mm: 86,   y_mm: 56,    rot: 0}
+  J401: {x_mm: 17,   y_mm: 5.0,   rot: 180}   # I2C 1: boca hacia el borde superior
+  J402: {x_mm: 31,   y_mm: 5.0,   rot: 180}   # I2C 2
+  J403: {x_mm: 45,   y_mm: 5.0,   rot: 180}   # SERIE
+  J404: {x_mm: 59,   y_mm: 5.0,   rot: 180}   # ANALÓGICO 1
+  J405: {x_mm: 73,   y_mm: 5.0,   rot: 180}   # ANALÓGICO 2
+  J407: {x_mm: 3,    y_mm: 12.22, rot: 0}     # D0..D13 y GND, pin 1 arriba
+  J408: {x_mm: 87,   y_mm: 14.76, rot: 0}     # A0..A7, 5V, 3V3, GND, RESET
+  J101: {x_mm: 16,   y_mm: 56.3,  rot: 0}     # USB-C, boca hacia el borde inferior
+  J406: {x_mm: 26.8, y_mm: 56.5,  rot: 90}    # SPI en fila horizontal junto al USB-C
+
+# Posiciones aproximadas del resto; tools/colocar.py las ajusta para quitar choques.
+aprox:
+  # --- microcontrolador y reloj (U1 en 37, 29.5; patas a 4.16 mm del centro) ---
+  U1:   {x_mm: 37,   y_mm: 29.5, rot: 0}
+  Y1:   {x_mm: 30.2, y_mm: 38.4, rot: 270}   # rot 270: XT1 arriba-izquierda y XT2 abajo-derecha, sin cruzar
+  C1:   {x_mm: 26.0, y_mm: 32.4, rot: 90}
+  C2:   {x_mm: 34.3, y_mm: 38.5, rot: 0}
+  C3:   {x_mm: 29.0, y_mm: 29.1, rot: 0}
+  C4:   {x_mm: 29.0, y_mm: 31.1, rot: 0}
+  C5:   {x_mm: 44.0, y_mm: 32.6, rot: 0}
+  C6:   {x_mm: 44.0, y_mm: 29.2, rot: 0}
+  # --- reinicio ---
+  R1:   {x_mm: 27.0, y_mm: 24.6, rot: 90}
+  D1:   {x_mm: 24.0, y_mm: 24.6, rot: 90}
+  SW1:  {x_mm: 22.5, y_mm: 18.5, rot: 0}
+  C103: {x_mm: 20.5, y_mm: 28.6, rot: 0}
+  J1:   {x_mm: 41.0, y_mm: 40.0, rot: 0}
+  # --- USB: CH340, ESD, CC ---
+  U101: {x_mm: 15.0, y_mm: 38.0, rot: 0}
+  C101: {x_mm: 20.0, y_mm: 31.5, rot: 90}
+  C102: {x_mm: 9.5,  y_mm: 37.0, rot: 90}
+  R103: {x_mm: 20.6, y_mm: 36.0, rot: 0}
+  R104: {x_mm: 20.6, y_mm: 38.0, rot: 0}
+  D101: {x_mm: 22.6, y_mm: 41.0, rot: 0}
+  R105: {x_mm: 25.9, y_mm: 41.0, rot: 0}
+  D102: {x_mm: 22.6, y_mm: 43.0, rot: 0}
+  R106: {x_mm: 25.9, y_mm: 43.0, rot: 0}
+  U102: {x_mm: 16.0, y_mm: 47.5, rot: 0}
+  R101: {x_mm: 10.5, y_mm: 47.0, rot: 90}
+  R102: {x_mm: 21.5, y_mm: 47.0, rot: 90}
+  # --- alimentación ---
+  F201: {x_mm: 27.0, y_mm: 50.0, rot: 0}
+  C201: {x_mm: 31.5, y_mm: 50.0, rot: 0}
+  C202: {x_mm: 27.0, y_mm: 46.5, rot: 0}
+  U201: {x_mm: 31.5, y_mm: 46.0, rot: 0}
+  C203: {x_mm: 35.5, y_mm: 46.5, rot: 0}
+  R201: {x_mm: 35.5, y_mm: 50.5, rot: 0}
+  D201: {x_mm: 38.5, y_mm: 50.5, rot: 0}
+  # --- LEDs, RGB y sensor de luz ---
+  D301: {x_mm: 43.0, y_mm: 14.5, rot: 0}
+  D302: {x_mm: 50.0, y_mm: 14.5, rot: 0}
+  D303: {x_mm: 57.0, y_mm: 14.5, rot: 0}
+  R301: {x_mm: 43.0, y_mm: 18.0, rot: 90}
+  R302: {x_mm: 50.0, y_mm: 18.0, rot: 90}
+  R303: {x_mm: 57.0, y_mm: 18.0, rot: 90}
+  D304: {x_mm: 66.5, y_mm: 15.5, rot: 0}
+  R304: {x_mm: 62.0, y_mm: 19.5, rot: 0}
+  R305: {x_mm: 66.5, y_mm: 19.5, rot: 0}
+  R306: {x_mm: 71.0, y_mm: 19.5, rot: 0}
+  Q302: {x_mm: 81.2, y_mm: 6.3, rot: 90}    # al lado de J405 (x > 78.5), fuera del cable y sin piezas altas
+  R312: {x_mm: 81.2, y_mm: 10.6, rot: 90}
+  # --- zona de manos: botones, perilla, buzzer, DIP ---
+  SW301: {x_mm: 51.0, y_mm: 31.5, rot: 0}
+  SW302: {x_mm: 61.5, y_mm: 31.5, rot: 0}
+  R307: {x_mm: 51.0, y_mm: 36.0, rot: 0}
+  R308: {x_mm: 61.5, y_mm: 36.0, rot: 0}
+  RV301: {x_mm: 70.0, y_mm: 25.5, rot: 0}
+  R313: {x_mm: 67.0, y_mm: 27.0, rot: 90}
+  BZ301: {x_mm: 51.0, y_mm: 45.5, rot: 0}
+  D305: {x_mm: 51.0, y_mm: 38.5, rot: 0}
+  Q301: {x_mm: 50.0, y_mm: 53.0, rot: 0}
+  R309: {x_mm: 54.3, y_mm: 52.5, rot: 0}
+  R310: {x_mm: 50.2, y_mm: 56.5, rot: 0}
+  R316: {x_mm: 59.0, y_mm: 41.0, rot: 0}
+  R315: {x_mm: 62.5, y_mm: 41.0, rot: 0}
+  R314: {x_mm: 66.0, y_mm: 41.0, rot: 0}
+  R311: {x_mm: 69.5, y_mm: 41.0, rot: 0}
+  SW303: {x_mm: 68.0, y_mm: 51.5, rot: 90}
+  # --- pull-ups de I2C ---
+  R401: {x_mm: 13.0, y_mm: 12.0, rot: 0}
+  R402: {x_mm: 16.5, y_mm: 12.0, rot: 0}
+
+# Reglas de cercanía (distancia centro a centro entre la pieza y el pin, ~2 mm de hueco real).
+# Las comprueba tools/colocar.py después de colocar.
+cerca_de:
+  C1:   {pin: "U1.7",  max_mm: 8}
+  C2:   {pin: "U1.8",  max_mm: 8}
+  Y1:   {pin: "U1.7",  max_mm: 8}
+  C3:   {pin: "U1.4",  max_mm: 4}
+  C4:   {pin: "U1.6",  max_mm: 4}
+  C5:   {pin: "U1.18", max_mm: 4}
+  C6:   {pin: "U1.20", max_mm: 4}
+  C101: {pin: "U101.16", max_mm: 4}
+  C102: {pin: "U101.4",  max_mm: 4}
+  U102: {pin: "J101.A6", max_mm: 10}
+grupos: []
+
+serigrafia:
+  referencias_ocultas: true      # los designadores (R1, C2…) pasan a la capa de fabricación: no se imprimen
+  trazo_mm: 0.15
+  alias_redes: {A4: "A4 SDA", A5: "A5 SCL", D0: "D0 RX", D1: "D1 TX"}   # nombre en el orden de pines de los conectores
+  # Posiciones en mm de la placa (esquina superior izquierda = 0, 0). Cada texto es el centro de un bloque de
+  # líneas (separadas por «\n»). `alto_mm` es la altura de letra: 1.0 mm es el mínimo legible (marca.md).
+  # Los nombres de periférico de 7 mm de paso (LEDs) se dejan en 1.0 mm; el diseño pedía 1.5 mm, no cabe
+  # (reporte de la parada 3).
+  arriba:
+    logotipo: {svg: spec/logos/ayemi-logotipo.svg, x_mm: 8.0, y_mm: 14.4, ancho_mm: 9.5}
+    # Emi de una tinta (manual 2.1, §4.3). El cuerpo completo (18 a 22 mm de alto, 11.3 a 13.8 de ancho) no cabe
+    # en ningún hueco de la cara superior, así que va la cabeza, de 10 mm de alto (rasgo mínimo 0.20 mm). x_mm e
+    # y_mm son el centro. No se usa emi-monocromo-blanco.svg: tiene grises que la serigrafía no imprime.
+    emi: {svg: spec/logos/emi-serigrafia-cabeza.svg, x_mm: 32.4, y_mm: 17.0, alto_mm: 10.0}
+    textos:
+      - {texto: "Chispa por\nAyemi · v0.1", x_mm: 13.4, y_mm: 23.6, alto_mm: 1.0}
+      - {texto: "I2C 1", x_mm: 17, y_mm: 10.7, alto_mm: 1.0}
+      - {texto: "I2C 2", x_mm: 31, y_mm: 10.7, alto_mm: 1.0}
+      - {texto: "SERIE", x_mm: 45, y_mm: 10.7, alto_mm: 1.0}
+      - {texto: "ANALÓGICO 1", x_mm: 59, y_mm: 10.7, alto_mm: 1.0}
+      - {texto: "ANALÓGICO 2", x_mm: 73, y_mm: 10.7, alto_mm: 1.0}
+      - {texto: "LED rojo\nD7", x_mm: 42.4, y_mm: 21.7, alto_mm: 1.0}
+      - {texto: "LED verde\nD8", x_mm: 50.5, y_mm: 21.7, alto_mm: 1.0}
+      - {texto: "LED L\nD13", x_mm: 57.7, y_mm: 21.7, alto_mm: 1.0}
+      - {texto: "RGB\nD9 D6 D5", x_mm: 66.5, y_mm: 21.7, alto_mm: 1.0}
+      - {texto: "Botón A\nD2", x_mm: 51.0, y_mm: 25.9, alto_mm: 1.2}
+      - {texto: "Botón B\nD4", x_mm: 61.5, y_mm: 25.9, alto_mm: 1.2}
+      - {texto: "Perilla\nA6", x_mm: 78.5, y_mm: 37.4, alto_mm: 1.2}
+      - {texto: "Buzzer\nD3", x_mm: 46.4, y_mm: 36.0, alto_mm: 1.0}
+      - {texto: "RESET", x_mm: 22.5, y_mm: 14.0, alto_mm: 1.0}
+      - {texto: "TX", x_mm: 19.8, y_mm: 41.0, alto_mm: 1.0}
+      - {texto: "RX", x_mm: 19.8, y_mm: 43.0, alto_mm: 1.0}
+      - {texto: "5V", x_mm: 38.5, y_mm: 52.6, alto_mm: 1.0}
+      - {texto: "ICSP", x_mm: 42.25, y_mm: 37.4, alto_mm: 1.0}
+      - {texto: "SPI", x_mm: 23.4, y_mm: 56.5, alto_mm: 1.0}
+      - {texto: "A6 = perilla\nA7 = luz", x_mm: 79.6, y_mm: 49.0, alto_mm: 1.0, alinear: izq}
+      - {texto: "ON = conectado", x_mm: 68.0, y_mm: 58.6, alto_mm: 1.0}
+    pines:          # rótulo de cada pin con el nombre de su red
+      - {ref: J407, lado: derecha, dx_mm: 2.2, alto_mm: 1.0}
+      - {ref: J408, lado: izquierda, dx_mm: 1.9, alto_mm: 1.0}
+      - {ref: J406, lado: abajo, dy_mm: 2.6, alto_mm: 1.0, sin_prefijo_D: true}
+    dip:            # nombre corto de cada posición, en vertical, sobre la fila de periféricos
+      ref: SW303
+      alto_mm: 1.0
+      dy_mm: 3.0
+      nombres: {BTN_A: BtnA, BZ_IN: Buzz, BTN_B: BtnB, RGB_B: RGBa, RGB_G: RGBv, LED_R: LEDr, LED_G: LEDv, RGB_R: RGBr}
+  abajo:
+    textos:
+      - {texto: "Hardware abierto\nCERN-OHL-S-2.0", x_mm: 45, y_mm: 26, alto_mm: 1.2}
+      - {texto: "Compatible con el IDE de Arduino\n(placa: Uno)", x_mm: 45, y_mm: 33, alto_mm: 1.2}
+      - {texto: "Chispa por Ayemi · v0.1", x_mm: 45, y_mm: 48, alto_mm: 1.2}
+    # QR de https://ayemi.org/p/328, generado con tools/qr_serigrafia.py. Polaridad normal: el blanco son los módulos
+    # claros y la zona de silencio; la máscara negra hace de módulo oscuro. Lado de 14 mm con la zona de silencio
+    # incluida (módulo de 0.48 mm); el mínimo es 12 mm. Se imprime reflejado para leerse desde la cara inferior.
+    qr: {svg: spec/logos/qr.svg, x_mm: 74.0, y_mm: 41.5, lado_mm: 14}
+    conectores:     # orden de pines en la cara inferior, bajo cada conector
+      refs: [J401, J402, J403, J404, J405]
+      y_mm: 4.5
+      alto_mm: 1.0
+
+# Diagrama de pines (tools/renders.py): qué se rotula y con qué texto.
+diagrama_pines:
+  headers: {J407: derecha, J408: izquierda, J406: abajo}
+  conectores: [J401, J402, J403, J404, J405]
+  nombres_conectores: {J401: "I2C 1", J402: "I2C 2", J403: "SERIE", J404: "ANALÓGICO 1", J405: "ANALÓGICO 2"}
+  alias: {A4: "A4 SDA", A5: "A5 SCL", D0: "D0 RX", D1: "D1 TX"}
+  dip: {ref: SW303, nombres: {BTN_A: "1 Botón A", BZ_IN: "2 Buzzer", BTN_B: "3 Botón B", RGB_B: "4 RGB azul", RGB_G: "5 RGB verde", LED_R: "6 LED rojo", LED_G: "7 LED verde", RGB_R: "8 RGB rojo"}}
+  perifericos:
+    - {ref: D301, texto: "LED rojo · D7"}
+    - {ref: D302, texto: "LED verde · D8", dy_mm: 4}
+    - {ref: D303, texto: "LED L · D13"}
+    - {ref: D304, texto: "RGB · D9 D6 D5"}
+    - {ref: SW301, texto: "Botón A · D2"}
+    - {ref: SW302, texto: "Botón B · D4"}
+    - {ref: BZ301, texto: "Buzzer · D3"}
+    - {ref: RV301, texto: "Perilla · A6", dx_mm: 7, dy_mm: 3}
+    - {ref: Q302, texto: "Luz · A7", dx_mm: -2, dy_mm: 5, ancla: end}
+    - {ref: SW1, texto: "RESET"}
+    - {ref: J101, texto: "USB-C", dy_mm: -3}
+    - {ref: D101, texto: "TX", dx_mm: -3}
+    - {ref: D102, texto: "RX", dx_mm: -3}
+    - {ref: D201, texto: "5V ON", dy_mm: 4}
+
+fab:
+  carpeta: fab/v0.1
+  existencias_aceptadas:
+    C84681: "CH340C: JLCPCB la marca como descontinuada, pero hay más de 100 000 unidades (50 placas necesitan 50). Plan B CH340N o CH340K en reportes/piezas.md."
+  capas_gerber: [F.Cu, B.Cu, F.Paste, F.Silkscreen, B.Silkscreen, F.Mask, B.Mask, Edge.Cuts]
+rotacion_jlc: {}    # huella: grados a sumar en el CPL (se descubre en la vista previa de JLC)
+
+# Modelos 3D sencillos (tools/modelos3d.py) para las piezas que las librerías de KiCad no traen. Son cajas y
+# cilindros apoyados en la placa; `centro_mm` está en el sistema de la huella (y hacia abajo). Las medidas salen de
+# la huella o de listados de la pieza; las hojas de datos de fabricante de estas piezas no están leídas completas
+# y las alturas se revisan en «Pendiente antes de fabricar» (README).
+modelos_3d:
+  carpeta: lib/ayemi.3dshapes
+  piezas:
+    - huella: "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
+      archivo: usb_c_hro_type_c_31_m_12
+      forma: caja
+      centro_mm: [0, 0]
+      ancho_mm: 8.94
+      fondo_mm: 7.30
+      alto_mm: 3.26
+      color: [0.72, 0.72, 0.75]
+      fuente: "J101. 8.94 x 7.3 mm: listado del TYPE-C-31-M-12 en un distribuidor; alto 3.26 mm (+-0.15): medición publicada del mismo conector. Huella de KiCad: caja de 9.04 x 7.40 mm."
+    - huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal"
+      archivo: jst_ph_s4b_ph_sm4_tb
+      forma: caja
+      centro_mm: [0, 0.6]
+      ancho_mm: 12.0
+      fondo_mm: 7.7
+      alto_mm: 5.51
+      color: [0.92, 0.90, 0.82]
+      fuente: "J401 a J405. Ancho y fondo: el contorno de fabricación de la huella (12.0 x 7.7 mm, incluye las patas); alto: 5.51 mm de altura del aislante según el listado de DigiKey."
+    - huella: "Buzzer_Beeper:MagneticBuzzer_CUI_CMT-8504-100-SMT"
+      archivo: zumbador_8_5mm
+      forma: cilindro
+      centro_mm: [0, 0]
+      diametro_mm: 8.5
+      alto_mm: 3.0
+      color: [0.08, 0.08, 0.08]
+      fuente: "BZ301. Diámetro de la huella (8.5 mm). Alto de 3.0 mm ESTIMADO: el número de la pieza real (Fengming YS-SBZ8530C05R30) sigue la convención 8530 = 8.5 x 3.0 mm; la hoja de datos no se pudo leer. La huella es de otra pieza (CUI CMT-8504, 4 mm de alto)."
+    - huella: "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+      archivo: potenciometro_rk09k_cuerpo
+      forma: caja
+      centro_mm: [7.0, 2.5]
+      ancho_mm: 12.1
+      fondo_mm: 9.9
+      alto_mm: 6.5
+      color: [0.45, 0.47, 0.52]
+      fuente: "RV301. Ancho y fondo: contorno de fabricación de la huella Alps RK09K (12.1 x 9.9 mm); alto 6.5 mm del cuerpo según la hoja de la familia RK09K. Sin eje ni perilla (la perilla se compra aparte y su largo no está definido)."
+    - huella: "LED_SMD:LED_Avago_PLCC4_3.2x2.8mm_CW"
+      archivo: led_rgb_3528
+      forma: caja
+      centro_mm: [0, 0]
+      ancho_mm: 3.5
+      fondo_mm: 2.8
+      alto_mm: 1.9
+      color: [0.95, 0.95, 0.92]
+      fuente: "D304. 3.5 x 2.8 x 1.9 mm: hoja de datos del XL-A3528RGBC-BM."
+    - huella: "LED_SMD:LED_1206_3216Metric"
+      archivo: fototransistor_temt6000
+      forma: caja
+      centro_mm: [0, 0]
+      ancho_mm: 4.0
+      fondo_mm: 2.0
+      alto_mm: 1.05
+      color: [0.12, 0.12, 0.14]
+      fuente: "Q302. 4 x 2 x 1.05 mm: hoja de datos del Vishay TEMT6000X01. Sustituye al modelo de LED 1206 que traía la huella."

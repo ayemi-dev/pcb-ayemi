@@ -1,0 +1,19 @@
+# Hoja «alimentacion»: PTC, reserva de 10 µF, LDO de 3.3 V y 1 A y LED de encendido.
+meta:
+  hoja: alimentacion.kicad_sch
+  titulo: "Alimentación"
+  referencias: [201, 299]
+
+redes_de_poder: ["VBUS", "+5V", "+3V3", "GND"]
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+componentes:
+  - {ref: F201, simbolo: "Device:Polyfuse", valor: "500mA", huella: "Fuse:Fuse_1206_3216Metric", lcsc: C163512, clase: Extended, alternativa: C49318356, justificacion: "Fusible rearmable de 500 mA en 1206: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C163512.html", pines: {1: VBUS, 2: "+5V"}, nota: "Retención 500 mA."}
+  - {ref: C201, simbolo: "Device:C", valor: "10uF", lcsc: C19702, clase: Basic, alternativa: C380314, datasheet: "https://www.lcsc.com/product-detail/C19702.html", pines: {1: "+5V", 2: GND}, nota: "Reserva del riel de 5 V."}
+  - {ref: C202, simbolo: "Device:C", valor: "10uF", lcsc: C19702, clase: Basic, alternativa: C380314, datasheet: "https://www.lcsc.com/product-detail/C19702.html", pines: {1: "+5V", 2: GND}, nota: "Entrada del regulador."}
+  - {ref: U201, simbolo: "Regulator_Linear:AP7361C-33E", valor: "AP7361C-33E", huella: "Package_TO_SOT_SMD:SOT-223-3_TabPin2", lcsc: C3743528, clase: Extended, alternativa: C150716, justificacion: "LDO de 3.3 V y 1 A en SOT-223R: ninguno es Basic. La alternativa C150716 (AP2114H-3.3) no tiene símbolo oficial de KiCad y su orden de pines debe comprobarse.", datasheet: "https://www.lcsc.com/product-detail/C3743528.html", pines: {1: "+5V", 2: GND, 3: "+3V3"}, nota: "AP7361C-33ER-13 (SOT-223R): pin 1 VIN, pin 2 y aleta GND, pin 3 VOUT, igual que el símbolo de KiCad. 1 A."}
+  - {ref: C203, simbolo: "Device:C", valor: "10uF", lcsc: C19702, clase: Basic, alternativa: C380314, datasheet: "https://www.lcsc.com/product-detail/C19702.html", pines: {1: "+3V3", 2: GND}, nota: "Salida del regulador."}
+  - {ref: R201, simbolo: "Device:R", valor: "1.5k", lcsc: C22843, clase: Basic, alternativa: C114668, datasheet: "https://www.lcsc.com/product-detail/C22843.html", pines: {1: "+5V", 2: PWR_A}, nota: "I = (5.0 - 3.0) / 1.5 kΩ = 1.33 mA típico."}
+  - {ref: D201, simbolo: "Device:LED", valor: "Azul", huella: "LED_SMD:LED_0603_1608Metric", lcsc: C2288, clase: Extended, alternativa: C84266, justificacion: "LED azul 0603: el único LED 0603 Basic es el rojo.", datasheet: "https://www.lcsc.com/product-detail/C2288.html", pines: {1: GND, 2: PWR_A}, nota: "LED de encendido (desde +5V)."}
+  - {ref: "#FLG03", simbolo: "power:PWR_FLAG", valor: "PWR_FLAG", bom: false, pines: {1: "+5V"}, nota: "+5V nace en la salida del PTC."}

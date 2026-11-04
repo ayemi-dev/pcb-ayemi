@@ -1,0 +1,47 @@
+# Hoja «conectores»: Conectores de 4 pines, PANTALLA y headers de GPIO.
+meta:
+  hoja: conectores.kicad_sch
+  titulo: "Conectores"
+  referencias: [401, 499]
+
+redes_de_poder: ["+5V", "+3V3", "GND"]
+etiquetas_jerarquicas:
+  - {red: IO10, forma: bidirectional}
+  - {red: IO11, forma: bidirectional}
+  - {red: IO12, forma: bidirectional}
+  - {red: IO13, forma: bidirectional}
+  - {red: IO14, forma: bidirectional}
+  - {red: IO15, forma: bidirectional}
+  - {red: IO16, forma: bidirectional}
+  - {red: IO17, forma: bidirectional}
+  - {red: IO18, forma: bidirectional}
+  - {red: IO21, forma: bidirectional}
+  - {red: IO38, forma: bidirectional}
+  - {red: IO39, forma: bidirectional}
+  - {red: IO4, forma: bidirectional}
+  - {red: IO40, forma: bidirectional}
+  - {red: IO41, forma: bidirectional}
+  - {red: IO42, forma: bidirectional}
+  - {red: IO43, forma: bidirectional}
+  - {red: IO44, forma: bidirectional}
+  - {red: IO47, forma: bidirectional}
+  - {red: IO48, forma: bidirectional}
+  - {red: IO5, forma: bidirectional}
+  - {red: IO6, forma: bidirectional}
+  - {red: IO7, forma: bidirectional}
+  - {red: IO8, forma: bidirectional}
+  - {red: IO9, forma: bidirectional}
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+componentes:
+  - {ref: J401, simbolo: "Connector_Generic:Conn_01x04", valor: "I2C 1", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: IO9, 2: IO8, 3: "+3V3", 4: GND}, nota: "SCL - SDA - 3V3 - GND. HUELLA PROVISIONAL."}
+  - {ref: J402, simbolo: "Connector_Generic:Conn_01x04", valor: "I2C 2", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: IO9, 2: IO8, 3: "+3V3", 4: GND}, nota: "En paralelo con I2C 1."}
+  - {ref: J403, simbolo: "Connector_Generic:Conn_01x04", valor: "SERIE", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: IO44, 2: IO43, 3: "+3V3", 4: GND}, nota: "RX - TX - 3V3 - GND, rotulados desde la placa: el pin 1 es la entrada de la placa."}
+  - {ref: J404, simbolo: "Connector_Generic:Conn_01x04", valor: "ANALOGICO 1", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: IO4, 2: IO5, 3: "+3V3", 4: GND}}
+  - {ref: J405, simbolo: "Connector_Generic:Conn_01x04", valor: "ANALOGICO 2", huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal", lcsc: C265102, clase: Extended, alternativa: C7429571, justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C265102.html", pines: {1: IO6, 2: IO7, 3: "+3V3", 4: GND}}
+  - {ref: J406, simbolo: "Connector_Generic:Conn_01x04", valor: "PANTALLA", huella: "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", lcsc: C492403, clase: Extended, alternativa: C2691448, justificacion: "Header de 2.54 mm: no hay Basic.", datasheet: "https://www.lcsc.com/product-detail/C492403.html", pines: {1: GND, 2: "+3V3", 3: IO9, 4: IO8}, nota: "GND - VCC - SCL - SDA, el orden de las pantallas OLED I2C comunes. 3.3 V."}
+  - {ref: R401, simbolo: "Device:R", valor: "4.7k", lcsc: C23162, clase: Basic, alternativa: C99782, datasheet: "https://www.lcsc.com/product-detail/C23162.html", pines: {1: "+3V3", 2: IO8}, nota: "Pull-up de SDA: tr = 0.8473 x 4.7 kΩ x 75 pF = 0.30 us."}
+  - {ref: R402, simbolo: "Device:R", valor: "4.7k", lcsc: C23162, clase: Basic, alternativa: C99782, datasheet: "https://www.lcsc.com/product-detail/C23162.html", pines: {1: "+3V3", 2: IO9}, nota: "Pull-up de SCL."}
+  - {ref: J407, simbolo: "Connector_Generic:Conn_01x10", valor: "IO A", huella: "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical", lcsc: C492409, clase: Extended, alternativa: C41425300, justificacion: "Header de 2.54 mm: no hay Basic.", datasheet: "https://www.lcsc.com/product-detail/C492409.html", pines: {1: IO10, 2: IO11, 3: IO12, 4: IO13, 5: IO14, 6: IO15, 7: IO16, 8: IO17, 9: IO18, 10: GND}, nota: "IO10 a IO18 (los pines que libera el DIP) y GND."}
+  - {ref: J408, simbolo: "Connector_Generic:Conn_01x12", valor: "IO B", huella: "Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical", lcsc: C2840012, clase: Extended, alternativa: C54803345, justificacion: "Header de 2.54 mm: no hay Basic.", datasheet: "https://www.lcsc.com/product-detail/C2840012.html", pines: {1: IO21, 2: IO38, 3: IO39, 4: IO40, 5: IO41, 6: IO42, 7: IO47, 8: IO48, 9: "+3V3", 10: "+5V", 11: GND, 12: GND}, nota: "GPIO libres, 3V3, 5V (VBUS después del fusible) y GND."}

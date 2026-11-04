@@ -1,0 +1,60 @@
+# Hoja «micro»: STM32F411CEU6, cristal de 25 MHz, desacoplo, RESET, BOOT0 y SWD.
+meta:
+  hoja: micro.kicad_sch
+  titulo: "STM32F411"
+  referencias: [1, 99]
+
+redes_de_poder: ["+3V3", "GND"]
+etiquetas_jerarquicas:
+  - {red: NRST, forma: bidirectional}
+  - {red: PA0, forma: bidirectional}
+  - {red: PA1, forma: bidirectional}
+  - {red: PA15, forma: bidirectional}
+  - {red: PA2, forma: bidirectional}
+  - {red: PA3, forma: bidirectional}
+  - {red: PA4, forma: bidirectional}
+  - {red: PA5, forma: bidirectional}
+  - {red: PA6, forma: bidirectional}
+  - {red: PA7, forma: bidirectional}
+  - {red: PB0, forma: bidirectional}
+  - {red: PB1, forma: bidirectional}
+  - {red: PB10, forma: bidirectional}
+  - {red: PB3, forma: bidirectional}
+  - {red: PB4, forma: bidirectional}
+  - {red: PB5, forma: bidirectional}
+  - {red: PB6, forma: bidirectional}
+  - {red: PB7, forma: bidirectional}
+  - {red: PB8, forma: bidirectional}
+  - {red: PB9, forma: bidirectional}
+  - {red: PC14, forma: bidirectional}
+  - {red: PC15, forma: bidirectional}
+  - {red: SD_CD, forma: bidirectional}
+  - {red: SD_CS, forma: bidirectional}
+  - {red: SD_MISO, forma: bidirectional}
+  - {red: SD_MOSI, forma: bidirectional}
+  - {red: SD_SCK, forma: bidirectional}
+  - {red: USB_DM, forma: bidirectional}
+  - {red: USB_DP, forma: bidirectional}
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+componentes:
+  - {ref: U1, simbolo: "MCU_ST_STM32F4:STM32F411CEUx", valor: "STM32F411CEU6", huella: "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm", lcsc: C60420, clase: Extended, alternativa: C2054095, justificacion: "STM32F411CEU6: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C60420.html", pines: {1: "+3V3", 2: SD_CD, 3: PC14, 4: PC15, 5: XT1, 6: XT2, 7: NRST, 8: GND, 9: "+3V3", 10: PA0, 11: PA1, 12: PA2, 13: PA3, 14: PA4, 15: PA5, 16: PA6, 17: PA7, 18: PB0, 19: PB1, 20: PB2, 21: PB10, 22: VCAP, 23: GND, 24: "+3V3", 25: SD_CS, 26: SD_SCK, 27: SD_MISO, 28: SD_MOSI, 29: "NC", 30: "NC", 31: PA10, 32: USB_DM, 33: USB_DP, 34: SWDIO, 35: GND, 36: "+3V3", 37: SWCLK, 38: PA15, 39: PB3, 40: PB4, 41: PB5, 42: PB6, 43: PB7, 44: BOOT0, 45: PB8, 46: PB9, 47: GND, 48: "+3V3", 49: GND}, nota: "PA8 y PA9 sin conexión: en el cargador de la ROM son I2C3_SCL y USART1_TX/VBUS (AN2606 rev. 32, sección 30). PA10 (USART1_RX) con pull-up a un nivel conocido (AN2606 4.3)."}
+  - {ref: Y1, simbolo: "Device:Crystal_GND24", valor: "25MHz", huella: "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm", lcsc: C13740, clase: Extended, alternativa: C5160142, justificacion: "Cristal de 25 MHz y 20 pF en 3225: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C13740.html", pines: {1: XT1, 2: GND, 3: XT2, 4: GND}, nota: "CL = 20 pF. C1 = C2 = 2 x (20 - 5) = 30 pF ideal con Cs = 5 pF supuesto; 33 pF da CL = 21.5 pF."}
+  - {ref: C1, simbolo: "Device:C", valor: "33pF", lcsc: C1663, clase: Basic, alternativa: C107047, datasheet: "https://www.lcsc.com/product-detail/C1663.html", pines: {1: XT1, 2: GND}}
+  - {ref: C2, simbolo: "Device:C", valor: "33pF", lcsc: C1663, clase: Basic, alternativa: C107047, datasheet: "https://www.lcsc.com/product-detail/C1663.html", pines: {1: XT2, 2: GND}}
+  - {ref: C3, simbolo: "Device:C", valor: "100nF", lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/product-detail/C14663.html", pines: {1: "+3V3", 2: GND}, nota: "Desacoplo de un pin VDD (24, 36 o 48)."}
+  - {ref: C4, simbolo: "Device:C", valor: "100nF", lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/product-detail/C14663.html", pines: {1: "+3V3", 2: GND}, nota: "Desacoplo de un pin VDD (24, 36 o 48)."}
+  - {ref: C5, simbolo: "Device:C", valor: "100nF", lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/product-detail/C14663.html", pines: {1: "+3V3", 2: GND}, nota: "Desacoplo de un pin VDD (24, 36 o 48)."}
+  - {ref: C6, simbolo: "Device:C", valor: "100nF", lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/product-detail/C14663.html", pines: {1: "+3V3", 2: GND}, nota: "VDDA."}
+  - {ref: C7, simbolo: "Device:C", valor: "1uF", lcsc: C15849, clase: Basic, alternativa: C106214, datasheet: "https://www.lcsc.com/product-detail/C15849.html", pines: {1: "+3V3", 2: GND}, nota: "VDDA."}
+  - {ref: C8, simbolo: "Device:C", valor: "4.7uF", lcsc: C19666, clase: Basic, alternativa: C277476, datasheet: "https://www.lcsc.com/product-detail/C19666.html", pines: {1: VCAP, 2: GND}, nota: "VCAP1: 4.7 uF (valor por confirmar con la hoja de la F411)."}
+  - {ref: C9, simbolo: "Device:C", valor: "10uF", lcsc: C19702, clase: Basic, alternativa: C380314, datasheet: "https://www.lcsc.com/product-detail/C19702.html", pines: {1: "+3V3", 2: GND}, nota: "Bulk junto al micro."}
+  - {ref: R1, simbolo: "Device:R", valor: "10k", lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/product-detail/C25804.html", pines: {1: BOOT0, 2: GND}, nota: "BOOT0 en bajo en funcionamiento normal."}
+  - {ref: R2, simbolo: "Device:R", valor: "10k", lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/product-detail/C25804.html", pines: {1: PB2, 2: GND}, nota: "PB2 (BOOT1) en bajo: BOOT0 = 1 y BOOT1 = 0 entran al cargador de la ROM."}
+  - {ref: R3, simbolo: "Device:R", valor: "10k", lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/product-detail/C25804.html", pines: {1: "+3V3", 2: PA10}, nota: "USART1_RX del cargador en un nivel conocido (AN2606 4.3)."}
+  - {ref: R4, simbolo: "Device:R", valor: "100k", lcsc: C25803, clase: Basic, alternativa: C14675, datasheet: "https://www.lcsc.com/product-detail/C25803.html", pines: {1: PA7, 2: GND}, nota: "PA7 es SPI1_MOSI en el cargador: nivel conocido (AN2606 4.3). Carga las fuentes de alta impedancia del conector ANALOGICO 2."}
+  - {ref: C10, simbolo: "Device:C", valor: "100nF", lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/product-detail/C14663.html", pines: {1: NRST, 2: GND}}
+  - {ref: SW1, simbolo: "Switch:SW_Push", valor: "RESET", huella: "Button_Switch_SMD:SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm", lcsc: C319409, clase: Extended, alternativa: C255813, justificacion: "Pulsador táctil SMD de 6x6 mm: el único Basic mide 5.1x5.1 mm, bajo el mínimo del requisito 4.2.", datasheet: "https://www.lcsc.com/product-detail/C319409.html", pines: {1: NRST, 2: GND}}
+  - {ref: SW2, simbolo: "Switch:SW_Push", valor: "BOOT0", huella: "Button_Switch_SMD:SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm", lcsc: C319409, clase: Extended, alternativa: C255813, justificacion: "Pulsador táctil SMD de 6x6 mm: el único Basic mide 5.1x5.1 mm, bajo el mínimo del requisito 4.2.", datasheet: "https://www.lcsc.com/product-detail/C319409.html", pines: {1: BOOT0, 2: "+3V3"}, nota: "BOOT0 a 3V3 al pulsar: entra al DFU de la ROM."}
+  - {ref: J1, simbolo: "Connector_Generic:Conn_01x05", valor: "SWD", huella: "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical", lcsc: C492404, clase: Extended, alternativa: C56153596, justificacion: "Header de 2.54 mm: no hay Basic.", datasheet: "https://www.lcsc.com/product-detail/C492404.html", pines: {1: "+3V3", 2: SWDIO, 3: SWCLK, 4: NRST, 5: GND}, nota: "3V3, SWDIO, SWCLK, NRST, GND."}

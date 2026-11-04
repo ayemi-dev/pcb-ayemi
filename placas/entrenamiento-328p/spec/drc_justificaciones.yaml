@@ -1,0 +1,9 @@
+# Advertencias del DRC que se aceptan, cada una con su motivo. Lo escribe una persona; tools/drc.py solo lo lee.
+# Los errores y las conexiones pendientes no se justifican nunca.
+advertencias:
+  - tipo: silk_edge_clearance
+    contiene: "J101"
+    motivo: >-
+      Los dos trazos de serigrafía del contorno del USB-C (J101) que llegan al borde de la placa vienen de la
+      huella oficial de KiCad: la caja metálica del conector se apoya en el borde y su contorno impreso queda
+      recortado por el corte. Solo afecta al dibujo de la serigrafía, no al cobre ni a la función.

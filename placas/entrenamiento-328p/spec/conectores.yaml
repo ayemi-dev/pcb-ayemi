@@ -1,0 +1,96 @@
+# Hoja «conectores»: 5 conectores de 4 pines, SPI, headers de 2.54 mm y pull-ups de I2C.
+# Cálculos: design.md 5.5.
+meta:
+  hoja: conectores.kicad_sch
+  titulo: "Conectores"
+  referencias: [401, 499]
+
+redes_de_poder: ["+5V", "+3V3", "GND"]
+
+etiquetas_jerarquicas:
+  - {red: D0,    forma: bidirectional}
+  - {red: D1,    forma: bidirectional}
+  - {red: D2,    forma: bidirectional}
+  - {red: D3,    forma: bidirectional}
+  - {red: D4,    forma: bidirectional}
+  - {red: D5,    forma: bidirectional}
+  - {red: D6,    forma: bidirectional}
+  - {red: D7,    forma: bidirectional}
+  - {red: D8,    forma: bidirectional}
+  - {red: D9,    forma: bidirectional}
+  - {red: D10,   forma: bidirectional}
+  - {red: D11,   forma: bidirectional}
+  - {red: D12,   forma: bidirectional}
+  - {red: D13,   forma: bidirectional}
+  - {red: A0,    forma: bidirectional}
+  - {red: A1,    forma: bidirectional}
+  - {red: A2,    forma: bidirectional}
+  - {red: A3,    forma: bidirectional}
+  - {red: A4,    forma: bidirectional}
+  - {red: A5,    forma: bidirectional}
+  - {red: A6,    forma: bidirectional}
+  - {red: A7,    forma: bidirectional}
+  - {red: RESET, forma: bidirectional}
+
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+
+piezas:
+  r4k7: &r4k7 {lcsc: C23162, clase: Basic, alternativa: C99782, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010116_UNI-ROYAL-Uniroyal-Elec-0603WAF4701T5E_C23162.pdf"}
+  hy4: &hy4
+    huella: "Connector_JST:JST_PH_S4B-PH-SM4-TB_1x04-1MP_P2.00mm_Horizontal"
+    lcsc: C265102
+    clase: Extended
+    alternativa: C7429571
+    justificacion: "Conector de 4 pines de 2.0 mm, horizontal SMD: ninguno es Basic. Es el JST original: su huella oficial de KiCad coincide con la pieza."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_JST-S4B-PH-SM4-TB-LF-SN_C265102.pdf"
+
+componentes:
+  # ---------------- Conectores de 4 pines (HY2.0-4P) ----------------
+  - {ref: J401, simbolo: "Connector_Generic:Conn_01x04", valor: "I2C 1", <<: *hy4, pines: {1: A5, 2: A4, 3: "+5V", 4: GND}, nota: "SCL - SDA - 5V - GND. JST S4B-PH-SM4-TB; la alternativa Megastar ZX-HY2.0-4PWT (C7429571) es de otra marca: comparar dimensiones antes de usarla."}
+  - {ref: J402, simbolo: "Connector_Generic:Conn_01x04", valor: "I2C 2", <<: *hy4, pines: {1: A5, 2: A4, 3: "+5V", 4: GND}, nota: "En paralelo con I2C 1."}
+  - {ref: J403, simbolo: "Connector_Generic:Conn_01x04", valor: "SERIE", <<: *hy4, pines: {1: D0, 2: D1, 3: "+5V", 4: GND}, nota: "RX - TX - 5V - GND rotulados desde la placa: pin 1 = D0 (RX del micro), pin 2 = D1 (TX del micro)."}
+  - {ref: J404, simbolo: "Connector_Generic:Conn_01x04", valor: "ANALOGICO 1", <<: *hy4, pines: {1: A0, 2: A1, 3: "+5V", 4: GND}, nota: "A0 - A1 - 5V - GND."}
+  - {ref: J405, simbolo: "Connector_Generic:Conn_01x04", valor: "ANALOGICO 2", <<: *hy4, pines: {1: A2, 2: A3, 3: "+5V", 4: GND}, nota: "A2 - A3 - 5V - GND."}
+
+  # ---------------- Pull-ups de I2C ----------------
+  - {ref: R401, simbolo: "Device:R", valor: "4.7k", <<: *r4k7, pines: {1: "+5V", 2: A4}, corriente_ma: {tipico: 1.06, maximo: 1.117}, nota: "Pull-up de SDA: 4.7 kΩ (tr = 0.30 µs con 75 pF; design.md 5.5). Típico: una sola línea en bajo."}
+  - {ref: R402, simbolo: "Device:R", valor: "4.7k", <<: *r4k7, pines: {1: "+5V", 2: A5}, corriente_ma: {tipico: 0, maximo: 1.117}, nota: "Pull-up de SCL: 4.7 kΩ."}
+
+  # ---------------- SPI ----------------
+  - ref: J406
+    simbolo: "Connector_Generic:Conn_01x06"
+    valor: "SPI"
+    huella: "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"
+    lcsc: C492405
+    clase: Extended
+    alternativa: C42431790
+    justificacion: "Header de 2.54 mm: no hay Basic."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2003191006_XFCN-PZ254V-11-06P_C492405.pdf"
+    pines: {1: D11, 2: D12, 3: D13, 4: D10, 5: "+5V", 6: GND}
+    nota: "MOSI - MISO - SCK - CS - 5V - GND."
+
+  # ---------------- Headers ----------------
+  - ref: J407
+    simbolo: "Connector_Generic:Conn_01x15"
+    valor: "D0-D13 y GND"
+    huella: "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical"
+    lcsc: C22465875
+    clase: Extended
+    alternativa: C2932704
+    justificacion: "Header de 2.54 mm: no hay Basic."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2409300902_XFCN-PZ254V-11-15P_C22465875.pdf"
+    pines: {1: D0, 2: D1, 3: D2, 4: D3, 5: D4, 6: D5, 7: D6, 8: D7, 9: D8, 10: D9, 11: D10, 12: D11, 13: D12, 14: D13, 15: GND}
+    nota: "GND junto a D13 (decisión de la revisión 1)."
+
+  - ref: J408
+    simbolo: "Connector_Generic:Conn_01x12"
+    valor: "A0-A7 y alimentacion"
+    huella: "Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical"
+    lcsc: C2840012
+    clase: Extended
+    alternativa: C54803345
+    justificacion: "Header de 2.54 mm: no hay Basic."
+    datasheet: "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2304140030_XFCN-PZ254V-11-12P_C2840012.pdf"
+    pines: {1: A0, 2: A1, 3: A2, 4: A3, 5: A4, 6: A5, 7: A6, 8: A7, 9: "+5V", 10: "+3V3", 11: GND, 12: RESET}
+    nota: "A0-A7, 5V, 3V3, GND y RESET."

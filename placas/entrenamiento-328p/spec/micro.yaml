@@ -1,0 +1,142 @@
+# Hoja «micro»: ATmega328P-AU, cristal, desacoplo, RESET y conector ICSP.
+# Cálculos: design.md 5.3. Piezas: reportes/piezas_respuesta.md (consulta del 2026-10-28).
+meta:
+  hoja: micro.kicad_sch
+  titulo: "Microcontrolador"
+  referencias: [1, 99]
+
+redes_de_poder: ["+5V", "GND"]
+
+etiquetas_jerarquicas:
+  - {red: D0,    forma: bidirectional}
+  - {red: D1,    forma: bidirectional}
+  - {red: D2,    forma: bidirectional}
+  - {red: D3,    forma: bidirectional}
+  - {red: D4,    forma: bidirectional}
+  - {red: D5,    forma: bidirectional}
+  - {red: D6,    forma: bidirectional}
+  - {red: D7,    forma: bidirectional}
+  - {red: D8,    forma: bidirectional}
+  - {red: D9,    forma: bidirectional}
+  - {red: D10,   forma: bidirectional}
+  - {red: D11,   forma: bidirectional}
+  - {red: D12,   forma: bidirectional}
+  - {red: D13,   forma: bidirectional}
+  - {red: A0,    forma: bidirectional}
+  - {red: A1,    forma: bidirectional}
+  - {red: A2,    forma: bidirectional}
+  - {red: A3,    forma: bidirectional}
+  - {red: A4,    forma: bidirectional}
+  - {red: A5,    forma: bidirectional}
+  - {red: A6,    forma: input}
+  - {red: A7,    forma: input}
+  - {red: RESET, forma: bidirectional}
+
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+
+piezas:   # datos comunes de compra (anclas de YAML); gen_hoja.py los ignora
+  r10k: &r10k {lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf"}
+  c100n: &c100n {lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"}
+  c22p: &c22p {lcsc: C1653, clase: Basic, alternativa: C7419421, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Samsung-Electro-Mechanics-CL10C220JB8NNNC_C1653.pdf"}
+  d4148: &d4148 {lcsc: C81598, clase: Basic, alternativa: C2099, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_1811061725_ST-Semtech-1N4148W_C81598.pdf"}
+
+componentes:
+  - ref: U1
+    simbolo: "MCU_Microchip_ATmega:ATmega328P-A"
+    valor: "ATmega328P-AU"
+    huella: "Package_QFP:TQFP-32_7x7mm_P0.8mm"
+    lcsc: C14877
+    clase: Extended
+    alternativa: C618816
+    justificacion: "No existe un ATmega328P-AU Basic; es la pieza preferida de JLCPCB (consulta 2026-10-28)."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2410010303_Microchip-Tech-ATMEGA328P-AU_C14877.pdf"
+    corriente_ma: {tipico: 12, maximo: 15}
+    pines:
+      1: D3
+      2: D4
+      3: GND
+      4: "+5V"
+      5: GND
+      6: "+5V"
+      7: XT1
+      8: XT2
+      9: D5
+      10: D6
+      11: D7
+      12: D8
+      13: D9
+      14: D10
+      15: D11
+      16: D12
+      17: D13
+      18: "+5V"       # AVCC directo a +5V, sin filtro LC (design.md 5.3)
+      19: A6
+      20: AREF
+      21: GND
+      22: A7
+      23: A0
+      24: A1
+      25: A2
+      26: A3
+      27: A4
+      28: A5
+      29: RESET
+      30: D0
+      31: D1
+      32: D2
+    nota: "Corriente de 12/15 mA estimada; se confirma con la hoja de datos (tarea 2.9)."
+
+  - ref: Y1
+    simbolo: "Device:Crystal_GND24"
+    valor: "16MHz"
+    huella: "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"
+    lcsc: C70562
+    clase: Extended
+    alternativa: C362471
+    justificacion: "Cristal de 16 MHz y 18 pF en 3225: ninguno es Basic (consulta 2026-10-28)."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2403291504_YXC-Crystal-Oscillators-X322516MRB4SI_C70562.pdf"
+    pines: {1: XT1, 2: GND, 3: XT2, 4: GND}
+    nota: "CL = 18 pF. Con C1 = C2 = 22 pF la CL real es 11 + 5 = 16 pF (design.md 5.3)."
+
+  - {ref: C1, simbolo: "Device:C", valor: "22pF", <<: *c22p, pines: {1: XT1, 2: GND}, nota: "Carga del cristal, C0G. C = 2 x (CL - Cs) = 26 pF ideal; 22 pF es Basic."}
+  - {ref: C2, simbolo: "Device:C", valor: "22pF", <<: *c22p, pines: {1: XT2, 2: GND}, nota: "Carga del cristal, C0G."}
+  - {ref: C3, simbolo: "Device:C", valor: "100nF", <<: *c100n, pines: {1: "+5V", 2: GND}, nota: "Desacoplo del pin 4 (VCC); a menos de 2 mm del pin."}
+  - {ref: C4, simbolo: "Device:C", valor: "100nF", <<: *c100n, pines: {1: "+5V", 2: GND}, nota: "Desacoplo del pin 6 (VCC); a menos de 2 mm del pin."}
+  - {ref: C5, simbolo: "Device:C", valor: "100nF", <<: *c100n, pines: {1: "+5V", 2: GND}, nota: "Desacoplo del pin 18 (AVCC); a menos de 2 mm del pin."}
+  - {ref: C6, simbolo: "Device:C", valor: "100nF", <<: *c100n, pines: {1: AREF, 2: GND}, nota: "AREF a GND, a menos de 2 mm del pin 20."}
+
+  - {ref: R1, simbolo: "Device:R", valor: "10k", <<: *r10k, pines: {1: "+5V", 2: RESET}, nota: "Pull-up de RESET: 10 kΩ."}
+
+  - ref: D1
+    simbolo: "Diode:1N4148W"
+    valor: "1N4148W"
+    huella: "Diode_SMD:D_SOD-123"
+    <<: *d4148
+    pines: {1: "+5V", 2: RESET}
+    nota: "Ánodo en RESET, cátodo en +5V: limita el pico del autorreset a riel + Vf (design.md 5.3)."
+
+  - ref: SW1
+    simbolo: "Switch:SW_Push"
+    valor: "RESET"
+    huella: "Button_Switch_SMD:SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm"
+    lcsc: C319409
+    clase: Extended
+    alternativa: C255813
+    justificacion: "Pulsador táctil SMD de 6x6 mm: el único Basic mide 5.1x5.1 mm, bajo el mínimo del requisito 4.2."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_1811151231_HYP--Hongyuan-Precision-1TS009A-1800-5000-CT_C319409.pdf"
+    pines: {1: RESET, 2: GND}
+    nota: "Huella oficial de KiCad para la familia HYP 1TS009 (6x6x5 mm, 2 pines); la pieza es la C319409 (1TS009A-1800-5000-CT). Un pulsador no tiene polaridad."
+
+  - ref: J1
+    simbolo: "Connector_Generic:Conn_02x03_Odd_Even"
+    valor: "ICSP"
+    huella: "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical"
+    lcsc: C65114
+    clase: Extended
+    alternativa: C53055678
+    justificacion: "Header 2x3 de 2.54 mm: no hay Basic."
+    datasheet: "https://www.lcsc.com/product-detail/C65114.html"
+    pines: {1: D12, 2: "+5V", 3: D13, 4: D11, 5: RESET, 6: GND}
+    nota: "ICSP estándar: 1 MISO, 2 VCC, 3 SCK, 4 MOSI, 5 RESET, 6 GND."

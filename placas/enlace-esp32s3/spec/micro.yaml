@@ -1,0 +1,49 @@
+# Hoja «micro»: ESP32-S3-WROOM-1-N8, desacoplo, EN y BOOT.
+meta:
+  hoja: micro.kicad_sch
+  titulo: "Módulo ESP32-S3"
+  referencias: [1, 99]
+
+redes_de_poder: ["+3V3", "GND"]
+etiquetas_jerarquicas:
+  - {red: IO1, forma: bidirectional}
+  - {red: IO10, forma: bidirectional}
+  - {red: IO11, forma: bidirectional}
+  - {red: IO12, forma: bidirectional}
+  - {red: IO13, forma: bidirectional}
+  - {red: IO14, forma: bidirectional}
+  - {red: IO15, forma: bidirectional}
+  - {red: IO16, forma: bidirectional}
+  - {red: IO17, forma: bidirectional}
+  - {red: IO18, forma: bidirectional}
+  - {red: IO2, forma: bidirectional}
+  - {red: IO21, forma: bidirectional}
+  - {red: IO38, forma: bidirectional}
+  - {red: IO39, forma: bidirectional}
+  - {red: IO4, forma: bidirectional}
+  - {red: IO40, forma: bidirectional}
+  - {red: IO41, forma: bidirectional}
+  - {red: IO42, forma: bidirectional}
+  - {red: IO43, forma: bidirectional}
+  - {red: IO44, forma: bidirectional}
+  - {red: IO47, forma: bidirectional}
+  - {red: IO48, forma: bidirectional}
+  - {red: IO5, forma: bidirectional}
+  - {red: IO6, forma: bidirectional}
+  - {red: IO7, forma: bidirectional}
+  - {red: IO8, forma: bidirectional}
+  - {red: IO9, forma: bidirectional}
+  - {red: USB_DM, forma: bidirectional}
+  - {red: USB_DP, forma: bidirectional}
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+componentes:
+  - {ref: U1, simbolo: "RF_Module:ESP32-S3-WROOM-1", valor: "ESP32-S3-WROOM-1-N8", huella: "ayemi:ESP32-S3-WROOM-1_ayemi", lcsc: C2913198, clase: Extended, alternativa: C2913197, justificacion: "Módulo ESP32-S3: ninguno es Basic.", datasheet: "https://www.lcsc.com/product-detail/C2913198.html", pines: {1: GND, 2: "+3V3", 3: EN, 4: IO4, 5: IO5, 6: IO6, 7: IO7, 8: IO15, 9: IO16, 10: IO17, 11: IO18, 12: IO8, 13: USB_DM, 14: USB_DP, 15: "NC", 16: "NC", 17: IO9, 18: IO10, 19: IO11, 20: IO12, 21: IO13, 22: IO14, 23: IO21, 24: IO47, 25: IO48, 26: "NC", 27: IO0, 28: "NC", 29: "NC", 30: "NC", 31: IO38, 32: IO39, 33: IO40, 34: IO41, 35: IO42, 36: IO44, 37: IO43, 38: IO2, 39: IO1, 40: GND, 41: GND}, nota: "Pines 15, 16 y 26 (IO3, IO46, IO45: arranque) y 28 a 30 (IO35 a IO37: PSRAM octal de las variantes R8) sin conexión. Antena de PCB: zona sin cobre."}
+  - {ref: C1, simbolo: "Device:C", valor: "10uF", lcsc: C19702, clase: Basic, alternativa: C380314, datasheet: "https://www.lcsc.com/product-detail/C19702.html", pines: {1: "+3V3", 2: GND}, nota: "Bulk junto al módulo."}
+  - {ref: C2, simbolo: "Device:C", valor: "100nF", lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/product-detail/C14663.html", pines: {1: "+3V3", 2: GND}, nota: "Desacoplo junto al pin 2."}
+  - {ref: C3, simbolo: "Device:C", valor: "100nF", lcsc: C14663, clase: Basic, alternativa: C91183, datasheet: "https://www.lcsc.com/product-detail/C14663.html", pines: {1: "+3V3", 2: GND}, nota: "Desacoplo adicional junto al módulo."}
+  - {ref: R1, simbolo: "Device:R", valor: "10k", lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/product-detail/C25804.html", pines: {1: "+3V3", 2: EN}, nota: "Pull-up de EN; con C4 forma el RC de arranque: 10 kΩ x 1 uF = 10 ms."}
+  - {ref: C4, simbolo: "Device:C", valor: "1uF", lcsc: C15849, clase: Basic, alternativa: C106214, datasheet: "https://www.lcsc.com/product-detail/C15849.html", pines: {1: EN, 2: GND}}
+  - {ref: SW1, simbolo: "Switch:SW_Push", valor: "RESET", huella: "Button_Switch_SMD:SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm", lcsc: C319409, clase: Extended, alternativa: C255813, justificacion: "Pulsador táctil SMD de 6x6 mm: el único Basic mide 5.1x5.1 mm, bajo el mínimo del requisito 4.2.", datasheet: "https://www.lcsc.com/product-detail/C319409.html", pines: {1: EN, 2: GND}}
+  - {ref: SW2, simbolo: "Switch:SW_Push", valor: "BOOT", huella: "Button_Switch_SMD:SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm", lcsc: C319409, clase: Extended, alternativa: C255813, justificacion: "Pulsador táctil SMD de 6x6 mm: el único Basic mide 5.1x5.1 mm, bajo el mínimo del requisito 4.2.", datasheet: "https://www.lcsc.com/product-detail/C319409.html", pines: {1: IO0, 2: GND}, nota: "BOOT (IO0 a GND) para entrar al cargador."}

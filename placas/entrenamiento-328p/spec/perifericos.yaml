@@ -1,0 +1,159 @@
+# Hoja «perifericos»: LEDs, RGB, botones A y B, buzzer, potenciómetro, luz y DIP de 8.
+# Cálculos: design.md 5.4. Valores recalculados con las piezas de reportes/piezas_respuesta.md.
+meta:
+  hoja: perifericos.kicad_sch
+  titulo: "Periféricos integrados"
+  referencias: [301, 399]
+
+redes_de_poder: ["+5V", "GND"]
+
+etiquetas_jerarquicas:
+  - {red: D2,  forma: bidirectional}
+  - {red: D3,  forma: bidirectional}
+  - {red: D4,  forma: bidirectional}
+  - {red: D5,  forma: bidirectional}
+  - {red: D6,  forma: bidirectional}
+  - {red: D7,  forma: bidirectional}
+  - {red: D8,  forma: bidirectional}
+  - {red: D9,  forma: bidirectional}
+  - {red: D13, forma: bidirectional}
+  - {red: A6,  forma: output}
+  - {red: A7,  forma: output}
+
+por_defecto:
+  R: "Resistor_SMD:R_0603_1608Metric"
+  C: "Capacitor_SMD:C_0603_1608Metric"
+
+piezas:
+  r10: &r10 {lcsc: C22859, clase: Basic, alternativa: C109318, datasheet: "https://www.lcsc.com/product-detail/C22859.html"}
+  r330: &r330 {lcsc: C23138, clase: Basic, alternativa: C105881, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010116_UNI-ROYAL-Uniroyal-Elec-0603WAF3300T5E_C23138.pdf"}
+  r510: &r510 {lcsc: C23193, clase: Basic, alternativa: C114670, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010116_UNI-ROYAL-Uniroyal-Elec-0603WAF5100T5E_C23193.pdf"}
+  r560: &r560 {lcsc: C23204, clase: Basic, alternativa: C114629, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010116_UNI-ROYAL-Uniroyal-Elec-0603WAF5600T5E_C23204.pdf"}
+  r680: &r680 {lcsc: C23228, clase: Basic, alternativa: C112310, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010100_UNI-ROYAL-Uniroyal-Elec-0603WAF6800T5E_C23228.pdf"}
+  r1k: &r1k {lcsc: C21190, clase: Basic, alternativa: C22548, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010130_UNI-ROYAL-Uniroyal-Elec-0603WAF1001T5E_C21190.pdf"}
+  r10k: &r10k {lcsc: C25804, clase: Basic, alternativa: C98220, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf"}
+  tact: &tact {lcsc: C319409, clase: Extended, alternativa: C255813, justificacion: "Pulsador táctil SMD de 6x6 mm: el único Basic mide 5.1x5.1 mm, bajo el mínimo del requisito 4.2.", datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_1811151231_HYP--Hongyuan-Precision-1TS009A-1800-5000-CT_C319409.pdf"}
+  d4148: &d4148 {lcsc: C81598, clase: Basic, alternativa: C2099, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_1811061725_ST-Semtech-1N4148W_C81598.pdf"}
+
+componentes:
+  # ---------------- DIP de 8 posiciones: la posición k une los pines k y 17-k ----------------
+  - ref: SW303
+    simbolo: "Switch:SW_DIP_x08"
+    valor: "DIP8"
+    huella: "Button_Switch_SMD:SW_DIP_SPSTx08_Slide_Omron_A6S-810x_W8.9mm_P2.54mm"
+    lcsc: C6709493
+    clase: Extended
+    alternativa: C7502790
+    justificacion: "Interruptor DIP de 8 posiciones SMD de 2.54 mm: ninguno es Basic."
+    datasheet: "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2405291211_SHOU-HAN-2-54-8P-TPPT_C6709493.pdf"
+    pines:
+      1: D2         # 1 Botón A
+      16: BTN_A
+      2: D3         # 2 Buzzer
+      15: BZ_IN
+      3: D4         # 3 Botón B
+      14: BTN_B
+      4: D5         # 4 RGB azul
+      13: RGB_B
+      5: D6         # 5 RGB verde
+      12: RGB_G
+      6: D7         # 6 LED rojo
+      11: LED_R
+      7: D8         # 7 LED verde
+      10: LED_G
+      8: D9         # 8 RGB rojo
+      9: RGB_R
+    nota: "En ON el periférico queda conectado. HUELLA PROVISIONAL: se usa el patrón del Omron A6S (SMD, 2.54 mm, gull-wing recesado) porque el SHOU HAN lo copia; comparar con la hoja de datos antes de la fase 3."
+
+  # ---------------- LEDs sueltos ----------------
+  - {ref: R301, simbolo: "Device:R", valor: "1k", <<: *r1k, pines: {1: LED_R, 2: LED_R_A}, corriente_ma: {tipico: 2.90, maximo: 3.45}, nota: "LED rojo: (4.9 - 2.0) / 1 kΩ = 2.90 mA típico (design.md 5.4)."}
+  - {ref: D301, simbolo: "Device:LED", valor: "Rojo", huella: "LED_SMD:LED_0603_1608Metric", lcsc: C2286, clase: Basic, alternativa: C84263, datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_1810231112_Hubei-KENTO-Elec-KT-0603R_C2286.pdf", pines: {1: GND, 2: LED_R_A}}
+
+  - {ref: R302, simbolo: "Device:R", valor: "510", <<: *r510, pines: {1: LED_G, 2: LED_G_A}, corriente_ma: {tipico: 3.53, maximo: 4.80}, nota: "LED verde de 3.1 V: (4.9 - 3.1) / 510 = 3.53 mA típico."}
+  - {ref: D302, simbolo: "Device:LED", valor: "Verde", huella: "LED_SMD:LED_0603_1608Metric", lcsc: C12624, clase: Extended, alternativa: C84267, justificacion: "LED verde 0603 de 3.1 V: el único LED 0603 Basic es el rojo.", datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_1806151818_Hubei-KENTO-Elec-KT-0603G_C12624.pdf", pines: {1: GND, 2: LED_G_A}}
+
+  - {ref: R303, simbolo: "Device:R", valor: "680", <<: *r680, pines: {1: D13, 2: LED_L_A}, corriente_ma: {tipico: 3.68, maximo: 4.78}, nota: "LED amarillo «L» en D13 (sin DIP): (4.9 - 2.4) / 680 = 3.68 mA típico."}
+  - {ref: D303, simbolo: "Device:LED", valor: "Amarillo", huella: "LED_SMD:LED_0603_1608Metric", lcsc: C2287, clase: Extended, alternativa: C84268, justificacion: "LED amarillo 0603: el único LED 0603 Basic es el rojo.", datasheet: "https://www.lcsc.com/product-detail/C2287.html", pines: {1: GND, 2: LED_L_A}}
+
+  # ---------------- LED RGB de cátodo común ----------------
+  - ref: D304
+    simbolo: "Device:LED_RGBK"
+    valor: "RGB"
+    huella: "LED_SMD:LED_Avago_PLCC4_3.2x2.8mm_CW"
+    lcsc: C3647023
+    clase: Extended
+    alternativa: C601684
+    justificacion: "RGB de cátodo común 3528: no hay Basic."
+    datasheet: "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2207041845_XINGLIGHT-XL-A3528RGBC-BM_C3647023.pdf"
+    pines: {1: RGB_R_A, 2: RGB_G_A, 3: RGB_B_A, 4: GND}
+    nota: "HUELLA PROVISIONAL: el orden de pines del XL-A3528RGBC-BM y el pin 1 se comparan con su hoja de datos antes de la fase 3. La alternativa C601684 es de 1.6x1.5 mm (otra huella)."
+  - {ref: R304, simbolo: "Device:R", valor: "680", <<: *r680, pines: {1: RGB_R, 2: RGB_R_A}, corriente_ma: {tipico: 4.26, maximo: 5.07}, nota: "RGB rojo: (4.9 - 2.0) / 680 = 4.26 mA típico; máximo 5.07 mA (excepción aceptada, design.md 5.4)."}
+  - {ref: R305, simbolo: "Device:R", valor: "560", <<: *r560, pines: {1: RGB_G, 2: RGB_G_A}, corriente_ma: {tipico: 3.39, maximo: 4.38}, nota: "RGB verde: (4.9 - 3.0) / 560 = 3.39 mA típico."}
+  - {ref: R306, simbolo: "Device:R", valor: "510", <<: *r510, pines: {1: RGB_B, 2: RGB_B_A}, corriente_ma: {tipico: 3.73, maximo: 4.80}, nota: "RGB azul: (4.9 - 3.0) / 510 = 3.73 mA típico."}
+
+  # ---------------- Botones A y B ----------------
+  - {ref: R307, simbolo: "Device:R", valor: "330", <<: *r330, pines: {1: BTN_A, 2: BTN_A_S}, corriente_ma: {tipico: 0.14, maximo: 0.26}, nota: "Protección del pin: 5.25 V / 330 Ω = 15.9 mA si el código lo pone en salida alta."}
+  - {ref: SW301, simbolo: "Switch:SW_Push", valor: "Botón A", huella: "Button_Switch_SMD:SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm", <<: *tact, pines: {1: BTN_A_S, 2: GND}, nota: "Huella oficial de KiCad para la familia HYP 1TS009 (6x6x5 mm, 2 pines); la pieza es la C319409 (1TS009A-1800-5000-CT). Un pulsador no tiene polaridad."}
+  - {ref: R308, simbolo: "Device:R", valor: "330", <<: *r330, pines: {1: BTN_B, 2: BTN_B_S}, corriente_ma: {tipico: 0.14, maximo: 0.26}, nota: "Igual que R307."}
+  - {ref: SW302, simbolo: "Switch:SW_Push", valor: "Botón B", huella: "Button_Switch_SMD:SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm", <<: *tact, pines: {1: BTN_B_S, 2: GND}, nota: "Igual que SW301."}
+
+  # ---------------- Buzzer pasivo magnético con transistor ----------------
+  - {ref: R309, simbolo: "Device:R", valor: "1k", <<: *r1k, pines: {1: BZ_IN, 2: Q_B}, nota: "Base de Q301: Ib = (4.5 - 0.8) / 1 kΩ - 0.08 mA = 3.6 mA; beta forzada = 76 / 3.6 = 21 (hFE mínimo 200)."}
+  - {ref: R310, simbolo: "Device:R", valor: "10k", <<: *r10k, pines: {1: Q_B, 2: GND}, nota: "Mantiene la base en bajo con el DIP en OFF o los pines en alta impedancia."}
+  - ref: Q301
+    simbolo: "Transistor_BJT:MMBT3904"
+    valor: "S8050"
+    huella: "Package_TO_SOT_SMD:SOT-23"
+    lcsc: C2146
+    clase: Basic
+    alternativa: C105433
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2310131500_Jiangsu-Changjing-Electronics-Technology-Co---Ltd--S8050-J3Y-RANGE-200-350_C2146.pdf"
+    pines: {1: Q_B, 2: GND, 3: BZ_C}
+    nota: "Se usa el símbolo del MMBT3904 porque comparte el orden de pines del SOT-23 (1 B, 2 E, 3 C). Confirmar el pinout del S8050 J3Y en la hoja de datos (tarea 2.9)."
+  - {ref: R311, simbolo: "Device:R", valor: "10", <<: *r10, pines: {1: "+5V", 2: BZ_S1}, nota: "Serie del buzzer: 4 x 10 Ω = 40 Ω. I = 5.05 / (40 + 26...34) = 76 a 68 mA; P = 58 mW por resistencia (design.md 5.4)."}
+  - {ref: R314, simbolo: "Device:R", valor: "10", <<: *r10, pines: {1: BZ_S1, 2: BZ_S2}, nota: "Serie del buzzer (2 de 4)."}
+  - {ref: R315, simbolo: "Device:R", valor: "10", <<: *r10, pines: {1: BZ_S2, 2: BZ_S3}, nota: "Serie del buzzer (3 de 4)."}
+  - {ref: R316, simbolo: "Device:R", valor: "10", <<: *r10, pines: {1: BZ_S3, 2: BZ_P}, nota: "Serie del buzzer (4 de 4)."}
+  - ref: BZ301
+    simbolo: "Device:Buzzer"
+    valor: "Buzzer 5V"
+    huella: "Buzzer_Beeper:MagneticBuzzer_CUI_CMT-8504-100-SMT"
+    lcsc: C7421674
+    clase: Extended
+    alternativa: C530411
+    justificacion: "Zumbador pasivo electromagnético de 5 V SMD: ninguno es Basic."
+    datasheet: "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2306141737_Fengming-YS-SBZ8530C05R30_C7421674.pdf"
+    corriente_ma: {tipico: 68.6, maximo: 76.5}
+    pines: {1: BZ_P, 2: BZ_C}
+    nota: "Bobina de unos 30 +/- 4 ohm (dato de una hoja genérica de 8530 de 5 V; confirmar con la del Fengming, tarea 2.9). HUELLA PROVISIONAL: la CUI CMT-8504 es de 8.5 mm; comparar con la hoja de datos antes de la fase 3."
+  - {ref: D305, simbolo: "Diode:1N4148W", valor: "1N4148W", huella: "Diode_SMD:D_SOD-123", <<: *d4148, pines: {1: BZ_P, 2: BZ_C}, nota: "Diodo de protección de la bobina (cátodo en BZ_P)."}
+
+  # ---------------- Potenciómetro (A6) ----------------
+  - ref: RV301
+    simbolo: "Device:R_Potentiometer"
+    valor: "10k"
+    huella: "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+    lcsc: C202373
+    clase: Extended
+    alternativa: C351173
+    justificacion: "Potenciómetro rotativo de 10 kΩ: ninguno es Basic. La perilla se compra aparte."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_1810170725_ALPSALPINE-RK09K1130AAU_C202373.pdf"
+    corriente_ma: {tipico: 0.50, maximo: 0.525}
+    pines: {1: "+5V", 2: POT_W, 3: GND}
+    nota: "Confirmar en la hoja de datos que el taper es lineal (B) y la corriente máxima del cursor."
+  - {ref: R313, simbolo: "Device:R", valor: "1k", <<: *r1k, pines: {1: POT_W, 2: A6}, nota: "Protege el cursor de un corto desde el header: 5.25 mA máximo. Impedancia de fuente al ADC <= 3.5 kΩ."}
+
+  # ---------------- Sensor de luz (A7) ----------------
+  - ref: Q302
+    simbolo: "Device:Q_Photo_NPN"
+    valor: "TEMT6000X01"
+    huella: "LED_SMD:LED_1206_3216Metric"
+    lcsc: C94098
+    clase: Extended
+    alternativa: C47416518
+    justificacion: "Fototransistor de luz ambiental: ninguno es Basic. Los PT19 y PT15 son de infrarrojo."
+    datasheet: "https://www.lcsc.com/datasheet/lcsc_datasheet_2410121820_Vishay-Intertech-TEMT6000X01_C94098.pdf"
+    corriente_ma: {tipico: 0.50, maximo: 0.525}
+    pines: {1: "+5V", 2: A7}
+    nota: "Emisor a A7, colector a +5V. Hoja de datos de Vishay leída: 10 uA típico a 20 lx y 50 uA a 100 lx (VCE 5 V); oscuridad 350 nA máx; VCEO 6 V, VECO 1.5 V; cuerpo 4 x 2 x 1.05 mm. HUELLA PROVISIONAL: la polaridad del 1206 no se pudo leer del dibujo; comprobar la marca de polaridad en la vista previa de JLCPCB (un montaje invertido pone 5 V en el emisor, sobre los 1.5 V de VECO). La alternativa C47416518 es de 0603 (otra huella)."
+  - {ref: R312, simbolo: "Device:R", valor: "10k", <<: *r10k, pines: {1: A7, 2: GND}, nota: "V(A7) = I_foto x 10 kΩ: 0.1 V a 20 lx, 0.5 V a 100 lx, unos 2.5 V a 500 lx (estimado, lineal). Satura cerca de 1000 lx. 10 kΩ es también el tope por la impedancia de fuente del ADC."}
